@@ -102,7 +102,6 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '<div class="content">';
-        echo '    <div class="movie-image"><img src="path/to/image/' . htmlspecialchars($row['Imagem']) . '" alt="Imagem do filme"></div>';
         echo '    <div class="movie-details">';
         echo '        <div class="movie-info">';
         echo '            <strong>Título do filme:</strong> ' . htmlspecialchars($row['Titulo']);
@@ -119,8 +118,6 @@ if ($result->num_rows > 0) {
         echo '            <input type="hidden" name="Categoria" value="' . htmlspecialchars($row['Categoria']) . '">';
         echo '            <input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($row['DataDeLancamento']) . '">';
         echo '            <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
-        echo '            <input type="hidden" name="Imagem" value="' . htmlspecialchars($row['Imagem']) . '">';
-        echo '            <input type="hidden" name="AvaliacaoMedia" value="' . htmlspecialchars($row['AvaliacaoMedia']) . '">';
         echo '            <button type="submit" class="comment-button">Ver Comentários</button>';
         echo '        </form>';
         echo '    </div>';
@@ -132,7 +129,6 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
     }
-    $conn->close();
-    ?>
+    
 </body>
 </html>

@@ -100,23 +100,19 @@
             }
 
             // Capturar e sanitizar os dados enviados via POST
-            $postsID = intval($_POST['PostID']);
+            $postID = intval($_POST['PostID']);
             $titulo = htmlspecialchars($_POST['Titulo']);
             $diretor = htmlspecialchars($_POST['Diretor']);
             $categoria = htmlspecialchars($_POST['Categoria']);
             $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
             $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
-            $imagem = htmlspecialchars($_POST['Imagem']);
-            $avaliacaoMedia = htmlspecialchars($_POST['AvaliacaoMedia']);
 
             // Exibir os dados do post
-            echo '<div class="movie-image"><img src="path/to/image/' . $imagem . '" alt="Imagem do filme"></div>';
             echo '<div class="movie-info">';
             echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
             echo '<strong>Diretor:</strong> ' . $diretor . '<br>';
             echo '<strong>Categoria:</strong> ' . $categoria . '<br>';
             echo '<strong>Data de Lançamento:</strong> ' . $dataDeLancamento . '<br>';
-            echo '<strong>Avaliação Média:</strong> ' . $avaliacaoMedia . '<br>';
             echo '</div>';
             echo '<div class="movie-description">' . $descricao . '</div>';
 
@@ -165,21 +161,14 @@
             // Formulário para adicionar um novo comentário
             echo '<div class="add-comment">';
             echo '<h3>Adicionar um Comentário</h3>';
-            echo '<form action="" method="posts">';
-            echo '<input type="hidden" name="PostID" value="' . htmlspecialchars($postID) . '">';
+            echo '<form action="inserecomentario.php" method="POST">'; // Aponta para 'inserecomentario.php' e usa o método POST
+            echo '<input type="hidden" name="PostID" value="' . htmlspecialchars($postID) . '">'; // Mantém o PostID como campo oculto
             echo '<label for="conteudo">Comentário:</label>';
-            echo '<textarea id="conteudo" name="conteudo" required></textarea>';
-            echo '<input type="hidden" name="Titulo" value="' . htmlspecialchars($titulo) . '">';
-            echo '<input type="hidden" name="Diretor" value="' . htmlspecialchars($diretor) . '">';
-            echo '<input type="hidden" name="Categoria" value="' . htmlspecialchars($categoria) . '">';
-            echo '<input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($dataDeLancamento) . '">';
-            echo '<input type="hidden" name="Descricao" value="' . htmlspecialchars($_POST['Descricao']) . '">';
-            echo '<input type="hidden" name="Imagem" value="' . htmlspecialchars($imagem) . '">';
-            echo '<input type="hidden" name="AvaliacaoMedia" value="' . htmlspecialchars($avaliacaoMedia) . '">';
-            echo '<input type="hidden" name="novoComentario" value="1">';
+            echo '<textarea id="conteudo" name="conteudo" required></textarea>'; // Campo para inserir o comentário
             echo '<input type="submit" value="Enviar">';
             echo '</form>';
             echo '</div>';
+
 
             // Fechar a conexão com o banco de dados
             $conn->close();
