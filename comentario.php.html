@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagem ChatGPT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #e5ddd5;
+        }
+        .chat-input {
+            position: fixed;
+            bottom: 10px;
+            width: 80%;
+            max-width: 600px;
+            display: flex;
+        }
+        .chat-input textarea {
+            flex-grow: 1;
+            padding: 10px 20px;
+            border: 2px solid #ccc;
+            border-radius: 20px 0 0 20px;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+            overflow: auto;
+        }
+        .chat-input button {
+            padding: 10px 15px;
+            border: 2px solid #ccc;
+            border-left: none;
+            background-color: #25D366;
+            color: white;
+            font-size: 16px;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+        .chat-input button:hover {
+            background-color: #128C7E;
+        }
+        .comments-display {
+            width: 80%;
+            max-width: 600px;
+            background-color: transparent;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+            margin-top: 50px; /* Adjusted space for content visibility */
+        }
+        .comment-item {
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 7.5px;
+            max-width: 60%;
+            word-wrap: break-word;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        .my-comment {
+            background-color: #dcf8c6;
+            margin-left: auto;
+            border-top-right-radius: 2px;
+        }
+        .other-comment {
+            background-color: #ffffff;
+            margin-right: auto;
+            border-top-left-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <?php
+    $conn = new mysqli('localhost', 'root', '', 'webPro');
+
+    if ($conn->connect_error) {
+        die("Conexão falhou: " . $conn->connect_error);
+    }
+
+    $sql = "SELECT Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Imagem, AvaliacaoMedia FROM post ORDER BY DataDeLancamento DESC";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="content">';
+            echo '    <div class="movie-image">';
+            echo '        <img src="path/to/image/' . htmlspecialchars($row['Imagem']) . '" alt="Imagem do filme">';
+            echo '    </div>';
+            echo '    <div class="movie-details">';
+            echo '        <div class="movie-info">';
+            echo '            <div><strong>Título do filme:</strong> ' . htmlspecialchars($row['Titulo']) . '</div>';
+            echo '            <div><strong>Diretor:</strong> ' . htmlspecialchars($row['Diretor']) . '</div>';
+            echo '            <div><strong>Categoria:</strong> ' . htmlspecialchars($row['Categoria']) . '</div>';
+            echo '            <div><strong>Ano:</strong> ' . htmlspecialchars(date('Y', strtotime($row['DataDeLancamento']))) . '</div>';
+            echo '        </div>';
+            echo '        <div class="movie-description">';
+            echo '            <p>' . nl2br(htmlspecialchars($row['Descricao'])) . '</p>';
+            echo '        </div>';
+            echo '    </div>';
+            echo '</div>';
+        }
+    } else {
+        echo "<p>Nenhuma mídia cadastrada.</p>";
+    }
+    $conn->close();
+    ?>
+    <div class="comments-display">
+        <!-- Dynamic comments will be displayed here -->
+    </div>
+    <div class="chat-input">
+        <textarea rows="1" placeholder="Digite uma mensagem"></textarea>
+        <button type="submit">Enviar</button>
+    </div>
+</body>
+</html>

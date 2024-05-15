@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Mídias</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mídias Cadastradas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Diretor</th>
+                <th>Ano de Lançamento</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $host = 'localhost';
+            $username = 'root';
+            $password = 'al123FRee';
+            $database = 'webPro';
+
+            $conn = new mysqli($host, $username, $password, $database);
+
+            if ($conn->connect_error) {
+                die("Conexão falhou: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT Titulo, Categoria, Diretor, DataDeLancamento, Descricao FROM midias";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>" . htmlspecialchars($row['Titulo']) . "</td>
+                            <td>" . htmlspecialchars($row['Categoria']) . "</td>
+                            <td>" . htmlspecialchars($row['Diretor']) . "</td>
+                            <td>" . htmlspecialchars($row['DataDeLancamento']) . "</td>
+                            <td>" . htmlspecialchars($row['Descricao']) . "</td>
+                          </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='5'>Nenhuma mídia cadastrada.</td></tr>";
+            }
+
+            $conn->close();
+            ?>
+        </tbody>
+    </table>
+</body>
+</html>

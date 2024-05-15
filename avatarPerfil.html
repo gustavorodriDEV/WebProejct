@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel de Avatares</title>
+    <style>
+        /* Estilos globais */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0; /* Cor de fundo suave */
+        }
+
+        /* Estilos do container do carrossel */
+        .carousel-container {
+            max-width: 400px;
+            height: 120px;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Estilos do carrossel */
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        /* Estilos de cada item do carrossel */
+        .carousel-item {
+            width: 80px;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        /* Corrigindo o último item do carrossel para não ter margem à direita */
+        .carousel-item:last-child {
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-container">
+        <div id="avatarCarousel" class="carousel">
+            <div class="carousel-item"><img src="" alt="imagem1.wrbp"></div>
+            <div class="carousel-item"><img src="avatar2.png" alt="Avatar 2"></div>
+            <div class="carousel-item"><img src="avatar3.png" alt="Avatar 3"></div>
+            <div class="carousel-item"><img src="avatar4.png" alt="Avatar 4"></div>
+            <div class="carousel-item"><img src="avatar5.png" alt="Avatar 5"></div>
+            <div class="carousel-item"><img src="avatar6.png" alt="Avatar 6"></div>
+            <div class="carousel-item"><img src="avatar7.png" alt="Avatar 7"></div>
+            <div class="carousel-item"><img src="avatar8.png" alt="Avatar 8"></div>
+            <div class="carousel-item"><img src="avatar9.png" alt="Avatar 9"></div>
+            <div class="carousel-item"><img src="avatar10.png" alt="Avatar 10"></div>
+        </div>
+    </div>
+</body>
+</html>

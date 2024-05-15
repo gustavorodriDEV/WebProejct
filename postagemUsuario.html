@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Filme</title>
+    <style>
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #f7f7f7;
+            border-radius: 50%;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ece5dd;
+        }
+        .content {
+            width: 90%;
+            max-width: 1024px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .movie-image {
+            flex: 1 1 40%;
+            margin-right: 20px;
+            height: 300px;
+            background-color: #000;
+        }
+        .movie-info {
+            flex: 1 2 60%;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <?php
+    $conn = new mysqli('localhost', 'root', '', 'webPro');
+
+    if ($conn->connect_error) {
+        die("Conexão falhou: " . $conn->connect_error);
+    }
+
+    $sql = "SELECT Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Imagem, AvaliacaoMedia FROM post";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="content">';
+            echo '    <div class="movie-image">';
+            echo '        <img src="path/to/image/' . htmlspecialchars($row['Imagem']) . '" alt="Imagem do filme">';
+            echo '    </div>';
+            echo '    <div class="movie-info">';
+            echo '        <div><strong>Título do filme:</strong> ' . htmlspecialchars($row['Titulo']) . '</div>';
+            echo '        <div><strong>Diretor:</strong> ' . htmlspecialchars($row['Diretor']) . '</div>';
+            echo '        <div><strong>Categoria:</strong> ' . htmlspecialchars($row['Categoria']) . '</div>';
+            echo '        <div><strong>Ano:</strong> ' . htmlspecialchars(date('Y', strtotime($row['DataDeLancamento']))) . '</div>';
+            echo '        <div class="movie-text"><p>' . nl2br(htmlspecialchars($row['Descricao'])) . '</p></div>';
+            echo '    </div>';
+            echo '</div>';
+        }
+    } else {
+        echo "<p>Nenhuma mídia cadastrada.</p>";
+    }
+    $conn->close();
+    ?>
+</body>
+</html>
