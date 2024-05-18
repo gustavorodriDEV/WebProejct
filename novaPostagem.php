@@ -1,11 +1,22 @@
+<?php
+session_start(); // Iniciar sessão no topo do arquivo
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    exit("Logue para acessar"); // Termina a execução e mostra a mensagem
+}
+
+// Se estiver logado, continua a renderizar a página
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nova Postagem</title>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Postagem</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+      <style>
             .navbar {
                 width: 100%;
                 background: linear-gradient(to right, #6e45e2, #88d3ce);
@@ -123,7 +134,7 @@
                 resize: none;
             }
         </style>
-    </head>
+  </head>
     <body>
         <div class="navbar">
             <a href="#search" class="nav-item"><i class="fas fa-search"></i> Pesquisa</a>

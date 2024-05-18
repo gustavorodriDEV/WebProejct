@@ -1,6 +1,6 @@
 <?php
-session_start(); // Iniciar a sessão
 
+session_start(); // Iniciar a sessão
 // Conexão com o banco de dados
 $host = "localhost";
 $user = "root";
