@@ -1,3 +1,9 @@
+<?php
+require_once 'autenticacao.php';
+autenticacao::checkLogin();  // Verifica se o usuário está logado
+$nomeUsuario = autenticacao::getUsername(); 
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -103,7 +109,7 @@
                 $categoria = htmlspecialchars($_POST['Categoria']);
                 $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
                 $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
-
+                $username = $_SESSION['username'];
                 // Exibir os dados do post
                 echo '<div class="movie-info">';
                 echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
@@ -131,27 +137,30 @@
                         }
                     }
 
-                    // Consultar os comentários associados ao PostID
-                    $sqlComentarios = "SELECT * from comentarios where PostID = $postID";
-                    $resultComentarios = $conn->query($sqlComentarios);
+                     // Consultar os comentários associados ao PostID
+                           $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
+                           $resultComentarios = $conn->query($sqlComentarios);
 
-                    // Exibir os comentários
-                    if ($resultComentarios->num_rows > 0) {
-                        echo '<div class="comments-section">';
-                        echo '<h3>Comentários</h3>';
-                        while ($row = $resultComentarios->fetch_assoc()) {
-                            $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
-                            $data = htmlspecialchars($row['DataDeComentario']);
-                            echo '<div class="comment">';
-                            echo '<strong>Data:</strong> ' . $data . '<br>';
-                            echo '<div class="comment-text">' . $conteudo . '</div>';
-                            echo '</div>';
-                        }
+                           // Exibir os comentários
+                           if ($resultComentarios->num_rows > 0) {
+                               echo '<div class="comments-section">';
+                               echo '<h3>Comentários</h3>';
+                               while ($row = $resultComentarios->fetch_assoc()) {
+                                   $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
+                                   $username = htmlspecialchars($row['Username']);
+                                   $data = htmlspecialchars($row['DataDeComentario']);
 
-                        echo '</div>';
-                    } else {
-                        echo '<p>Sem comentários.</p>';
-                    }
+                                   echo '<div class="comment">';
+                                   echo '<strong>Usuário:</strong> ' . $username . '<br>';  // Exibir nome de usuário
+                           ;
+                                   echo '<div class="comment-text">' . $conteudo . '</div>';
+                                   echo '</div>';
+                               }
+                               echo '</div>';
+                           } else {
+                               echo '<p>Sem comentários.</p>';
+                           }
+
                 } else {
                     echo "<p>PostID inválido.</p>";
                 }
@@ -161,15 +170,21 @@
             }
             ?> 
         </div>
-        <div class = "add-comment">
-            <h3>Adicionar um Comentário</h3>
-            <form action = "inserecomentario.php" method = "POST">
-                <input type = "hidden" name = "PostID" value = "<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
-                <label for = "conteudo">Comentário:</label>
-                <textarea id = "conteudo" name = "conteudo" required></textarea>
-                <input type = "submit" value = "Enviar">
-            </form>
-        </div >
+            <div class="add-comment">
+                <h3>Adicionar um Comentário</h3>
+                <form action="inserecomentario.php" method="POST">
+                    <!-- Campo oculto para PostID -->
+                    <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
+
+                    <!-- Campo oculto para o nome do usuário -->
+                    <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
+
+                    <label for="conteudo">Comentário:</label>
+                    <textarea id="conteudo" name="conteudo" required></textarea>
+                    <input type="submit" value="Enviar">
+                </form>
+            </div>
+
 
 
 
