@@ -7,16 +7,23 @@ if ($conn->connect_error) {
 }
 
 // Verifica se os dados foram enviados pelo método POST
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo']) && isset($_POST['PostID'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['PostID'], $_POST['username'])) {
     // Capturar e sanitizar os dados enviados via POST
     $postID = intval($_POST['PostID']);
+    $username = htmlspecialchars($_POST['username']);
     $conteudo = $conn->real_escape_string(htmlspecialchars($_POST['conteudo']));
 
-    // SQL para inserir o novo comentário
-    $sql = "INSERT INTO comentarios (PostID, Conteudo) VALUES (?, ?)";
+    // Verificar se o nome de usuário está em branco
+    if (empty($username)) {
+        echo "Erro: Nome de usuário está em branco.";
+        exit;  // Para a execução se o nome de usuário estiver em branco
+    }
+
+    // SQL para inserir o novo comentário junto com o username
+    $sql = "INSERT INTO comentarios (PostID, Username, Conteudo) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
-        $stmt->bind_param("is", $postID, $conteudo);
+        $stmt->bind_param("iss", $postID, $username, $conteudo);
         $stmt->execute();
         $stmt->close();
 
@@ -28,28 +35,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo']) && isset($
     }
 }
 
-// Buscar e exibir comentários
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['PostID'])) {
-    $postID = intval($_GET['PostID']); // Default PostID é 1, se não fornecido
-    $sql = "SELECT Conteudo FROM comentarios WHERE PostID = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("i", $postID);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            echo "<p>" . htmlspecialchars($row['Conteudo']) . "</p>";
-        }
-        $stmt->close();
-
-        // Redirecionar para feed.php após exibir os comentários
-        header('Location: feed.php');
-        exit;
-    } else {
-        echo "Erro ao buscar comentários: " . $conn->error;
-    }
-}
-
 $conn->close();
-
 ?>

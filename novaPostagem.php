@@ -1,12 +1,6 @@
 <?php
-session_start(); // Iniciar sessão no topo do arquivo
-
-// Verifica se o usuário está logado
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    exit("Logue para acessar"); // Termina a execução e mostra a mensagem
-}
-
-// Se estiver logado, continua a renderizar a página
+require_once 'autenticacao.php';  // Inclui a classe de autenticação
+autenticacao::checkLogin();  // Verifica se o usuário está logado
 ?>
 
 <!DOCTYPE html>
