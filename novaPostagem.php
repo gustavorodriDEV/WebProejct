@@ -1,6 +1,10 @@
 <?php
-require_once 'autenticacao.php';  // Inclui a classe de autenticação
-autenticacao::checkLogin();  // Verifica se o usuário está logado
+require_once 'autenticacao.php';  
+autenticacao::checkLogin();  
+
+include 'navBar.php';
+echo $GLOBALS['navbar']; 
+
 ?>
 
 <!DOCTYPE html>
@@ -130,12 +134,6 @@ autenticacao::checkLogin();  // Verifica se o usuário está logado
         </style>
   </head>
     <body>
-        <div class="navbar">
-            <a href="#search" class="nav-item"><i class="fas fa-search"></i> Pesquisa</a>
-            <a href="perfil.html" class="nav-item"><i class="fas fa-user"></i> Perfil</a>
-            <a href="novaPostagem.html" class="nav-item"><i class="fas fa-pencil-alt"></i> Postagem</a>
-            <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Início</a>
-        </div>
 
         <div class="container">
             <h1>Nova Postagem</h1>

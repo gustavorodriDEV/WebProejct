@@ -1,6 +1,9 @@
 <?php
-require_once 'autenticacao.php'; 
-autenticacao::checkLogin(); 
+require_once 'autenticacao.php';
+autenticacao::checkLogin();
+
+include 'navBar.php';
+echo $GLOBALS['navbar']; // Aqui, use 'navbar' ao invés de 'navBar'
 ?>
 
 <!DOCTYPE html>
@@ -13,35 +16,18 @@ autenticacao::checkLogin();
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     </head>
     <body>
-
-        <div class="navbar">
-            <a href="#search" class="nav-item"><i class="fas fa-search"></i> Pesquisa</a>
-            <a href="perfil.html" class="nav-item"><i class="fas fa-user"></i> Perfil</a>
-            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
-            <a href="novaPostagem.html" class="nav-item"><i class="fas fa-pencil-alt"></i> Postagem</a>
-            <?php endif; ?>
-            <a href="index.php" class="nav-item"><i class="fas fa-home"></i> Inicio</a>
-        </div>
-
-
         <div class="avatar" onclick="window.location.href = 'avatarPerfil.html';">
             <i class="fas fa-user-circle avatar-icon" style="font-size: 150px;"></i>
             <div class="user-name">Nome do Usuário</div>
         </div>
 
-
-
-
         <div class="info-container">
             <div class="line-separator"></div>
-
             <div class="name-description">
                 <p id="userNameDisplay" class="placeholder-text">Nome</p>
                 <p id="userDescriptionDisplay" class="placeholder-text">Descrição...</p>
                 <button id="openModalButton">Alterar</button>
             </div>
-
-
         </div>
         <div class="line-separator2"></div>
         <div class="postsLike">

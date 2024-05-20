@@ -13,11 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['Po
     $username = htmlspecialchars($_POST['username']);
     $conteudo = $conn->real_escape_string(htmlspecialchars($_POST['conteudo']));
 
-    // Verificar se o nome de usuário está em branco
-    if (empty($username)) {
-        echo "Erro: Nome de usuário está em branco.";
-        exit;  // Para a execução se o nome de usuário estiver em branco
-    }
 
     // SQL para inserir o novo comentário junto com o username
     $sql = "INSERT INTO comentarios (PostID, Username, Conteudo) VALUES (?, ?, ?)";
@@ -28,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['Po
         $stmt->close();
 
         // Redirecionar para feed.php após a inserção do comentário
-        header('Location: feed.php');
+        header('Location: Feed.php');
         exit;
     } else {
         echo "Erro ao preparar a inserção: " . $conn->error;

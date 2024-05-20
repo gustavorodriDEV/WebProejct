@@ -1,7 +1,6 @@
 <?php
 require_once 'autenticacao.php';
-autenticacao::checkLogin();  // Verifica se o usuário está logado
-$nomeUsuario = autenticacao::getUsername(); 
+autenticacao::checkLogin();
 ?>
 
 <!DOCTYPE html>
@@ -16,9 +15,9 @@ $nomeUsuario = autenticacao::getUsername();
                 margin: 0;
                 padding: 0;
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
                 align-items: center;
-                height: 100vh;
+                min-height: 100vh;
             }
             .content {
                 background-color: white;
@@ -27,7 +26,7 @@ $nomeUsuario = autenticacao::getUsername();
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 width: 60%;
                 max-width: 800px;
-                margin: 20px;
+                margin: 20px 0;
             }
             .movie-image img {
                 max-width: 100%;
@@ -45,15 +44,44 @@ $nomeUsuario = autenticacao::getUsername();
             }
             .comments-section {
                 margin-top: 20px;
+                width: 776.19px; /* Define a largura específica */
+                height: 282px; /* Define a altura específica */
+                margin-left: auto;
+                margin-right: auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #fefefe;
+                overflow-y: auto; /* Permite rolagem se o conteúdo exceder a altura */
             }
+
             .comment {
                 background-color: #f9f9f9;
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 4px;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s ease;
+            }
+            .comment:hover {
+                background-color: #f1f1f1;
             }
             .comment strong {
                 display: block;
+                font-size: 1.1em;
+                color: #333;
+            }
+            .add-comment {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 10px;
+                background: #f9f9f9;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+                display: flex;
+                justify-content: center;
+                z-index: 1000;
             }
             .add-comment textarea {
                 padding: 8px 12px;
@@ -69,11 +97,9 @@ $nomeUsuario = autenticacao::getUsername();
                 box-shadow: none;
                 transition: border-color 0.3s;
             }
-
             .add-comment textarea:focus {
                 border-color: #808080;
             }
-
             .add-comment input[type="submit"] {
                 padding: 10px 20px;
                 border: none;
@@ -84,11 +110,9 @@ $nomeUsuario = autenticacao::getUsername();
                 font-size: 16px;
                 transition: background-color 0.3s;
             }
-
             .add-comment input[type="submit"]:hover {
                 background-color: #365899;
             }
-
         </style>
     </head>
     <body>
@@ -96,13 +120,11 @@ $nomeUsuario = autenticacao::getUsername();
             <?php
             // Verificar se os dados foram enviados pelo método POST
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Conectar ao banco de dados
                 $conn = new mysqli('localhost', 'root', '', 'webPro');
                 if ($conn->connect_error) {
                     die("Conexão falhou: " . $conn->connect_error);
                 }
 
-                // Capturar e sanitizar os dados enviados via POST
                 $postID = intval($_POST['PostID']);
                 $titulo = htmlspecialchars($_POST['Titulo']);
                 $diretor = htmlspecialchars($_POST['Diretor']);
@@ -110,7 +132,7 @@ $nomeUsuario = autenticacao::getUsername();
                 $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
                 $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
                 $username = $_SESSION['username'];
-                // Exibir os dados do post
+
                 echo '<div class="movie-info">';
                 echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
                 echo '<strong>Diretor:</strong> ' . $diretor . '<br>';
@@ -137,56 +159,57 @@ $nomeUsuario = autenticacao::getUsername();
                         }
                     }
 
-                     // Consultar os comentários associados ao PostID
-                           $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
-                           $resultComentarios = $conn->query($sqlComentarios);
+                    $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
+                    $resultComentarios = $conn->query($sqlComentarios);
 
-                           // Exibir os comentários
-                           if ($resultComentarios->num_rows > 0) {
-                               echo '<div class="comments-section">';
-                               echo '<h3>Comentários</h3>';
-                               while ($row = $resultComentarios->fetch_assoc()) {
-                                   $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
-                                   $username = htmlspecialchars($row['Username']);
-                                   $data = htmlspecialchars($row['DataDeComentario']);
+                    $commentsHTML = ''; // Inicializa uma string vazia para armazenar os comentários
+                    // Exibir os comentários
+                    if ($resultComentarios->num_rows > 0) {
+                        $commentsHTML .= '<div class="comments-section">';
+                        $commentsHTML .= '<h3>Comentários</h3>';
+                        while ($row = $resultComentarios->fetch_assoc()) {
+                            $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
+                            $username = htmlspecialchars($row['Username']);
+                            $data = htmlspecialchars($row['DataDeComentario']);
 
-                                   echo '<div class="comment">';
-                                   echo '<strong>Usuário:</strong> ' . $username . '<br>';  // Exibir nome de usuário
-                           ;
-                                   echo '<div class="comment-text">' . $conteudo . '</div>';
-                                   echo '</div>';
-                               }
-                               echo '</div>';
-                           } else {
-                               echo '<p>Sem comentários.</p>';
-                           }
+                            $commentsHTML .= '<div class="comment">';
+                            $commentsHTML .= '<strong>' . $username . '</strong> <br>';  // Exibir nome de usuário
+                            $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
+                            $commentsHTML .= '</div>';
+                        }
+                        $commentsHTML .= '</div>';
+                    } else {
+                        $commentsHTML .= '<p>Sem comentários.</p>';
+                    }
 
+                    if ($resultComentarios === false) {
+                        echo "<p>PostID inválido.</p>";
+                    }
+
+                    $conn->close();
                 } else {
-                    echo "<p>PostID inválido.</p>";
+                    echo "<p>Post não encontrado.</p>";
                 }
-                $conn->close();
-            } else {
-                echo "<p>Nenhum dado recebido.</p>";
             }
-            ?> 
+            ?>
+        </div> 
+
+        <div>
+            <?php echo $commentsHTML; ?>
         </div>
-            <div class="add-comment">
-                <h3>Adicionar um Comentário</h3>
-                <form action="inserecomentario.php" method="POST">
-                    <!-- Campo oculto para PostID -->
-                    <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
 
-                    <!-- Campo oculto para o nome do usuário -->
-                    <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
+        <div class="add-comment">
+            <h3>Adicionar um Comentário</h3>
+            <form action="inserecomentario.php" method="POST">
+                <!-- Campo oculto para PostID -->
+                <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
 
-                    <label for="conteudo">Comentário:</label>
-                    <textarea id="conteudo" name="conteudo" required></textarea>
-                    <input type="submit" value="Enviar">
-                </form>
-            </div>
+                <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
 
-
-
-
+                <label for="conteudo">Comentário:</label>
+                <textarea id="conteudo" name="conteudo" required></textarea>
+                <input type="submit" value="Enviar">
+            </form>
+        </div>
     </body>
 </html>
