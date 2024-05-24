@@ -1,6 +1,6 @@
 <?php
-require_once 'autenticacao.php';  // Inclui a classe de autenticação
-autenticacao::checkLogin();  // Verifica se o usuário está logado
+//require_once 'autenticacao.php';  // Inclui a classe de autenticação
+//autenticacao::checkLogin();  // Verifica se o usuário está logado
 ?>
 
 <!DOCTYPE html>

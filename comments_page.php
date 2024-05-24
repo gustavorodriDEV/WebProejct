@@ -22,12 +22,13 @@ autenticacao::checkLogin();
             .content {
                 background-color: white;
                 padding: 20px;
-                border-radius: 8px;
+                border-radius: 16px; /* Borda mais arredondada */
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                width: 60%;
-                max-width: 800px;
+                width: 70%; /* Largura aumentada */
+                max-width: 1000px; /* Largura máxima aumentada */
                 margin: 20px 0;
             }
+
             .movie-image img {
                 max-width: 100%;
                 height: auto;
@@ -78,11 +79,19 @@ autenticacao::checkLogin();
                 bottom: 0;
                 padding: 10px;
                 background: #f9f9f9;
-                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+                box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
                 display: flex;
                 justify-content: center;
                 z-index: 1000;
             }
+
+            .add-comment form {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                max-width: 800px;
+            }
+
             .add-comment textarea {
                 padding: 8px 12px;
                 border: 1px solid #ccc;
@@ -96,10 +105,13 @@ autenticacao::checkLogin();
                 outline: none;
                 box-shadow: none;
                 transition: border-color 0.3s;
+                margin-right: 10px;
             }
+
             .add-comment textarea:focus {
                 border-color: #808080;
             }
+
             .add-comment input[type="submit"] {
                 padding: 10px 20px;
                 border: none;
@@ -110,9 +122,11 @@ autenticacao::checkLogin();
                 font-size: 16px;
                 transition: background-color 0.3s;
             }
+
             .add-comment input[type="submit"]:hover {
                 background-color: #365899;
             }
+
         </style>
     </head>
     <body>
@@ -131,7 +145,7 @@ autenticacao::checkLogin();
                 $categoria = htmlspecialchars($_POST['Categoria']);
                 $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
                 $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
-                $username = $_SESSION['username'];
+                //$username = $_SESSION['username'];
 
                 echo '<div class="movie-info">';
                 echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
@@ -171,9 +185,10 @@ autenticacao::checkLogin();
                             $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
                             $username = htmlspecialchars($row['Username']);
                             $data = htmlspecialchars($row['DataDeComentario']);
+                            $dataFormatada = date('d/m/Y H:i:s', strtotime($data));  // Formata a data e hora
 
                             $commentsHTML .= '<div class="comment">';
-                            $commentsHTML .= '<strong>' . $username . '</strong> <br>';  // Exibir nome de usuário
+                            $commentsHTML .= '<strong>' . $username . '</strong> <span>' . $dataFormatada . '</span><br>';  // Exibir nome de usuário e data
                             $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
                             $commentsHTML .= '</div>';
                         }
@@ -187,6 +202,7 @@ autenticacao::checkLogin();
                     }
 
                     $conn->close();
+
                 } else {
                     echo "<p>Post não encontrado.</p>";
                 }
@@ -195,18 +211,19 @@ autenticacao::checkLogin();
         </div> 
 
         <div>
-            <?php echo $commentsHTML; ?>
+
+            <?php
+            echo $commentsHTML;
+            ?>
         </div>
 
         <div class="add-comment">
-            <h3>Adicionar um Comentário</h3>
+            <h3>Faça um Comentário  </h3>
             <form action="inserecomentario.php" method="POST">
                 <!-- Campo oculto para PostID -->
                 <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
 
                 <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
-
-                <label for="conteudo">Comentário:</label>
                 <textarea id="conteudo" name="conteudo" required></textarea>
                 <input type="submit" value="Enviar">
             </form>

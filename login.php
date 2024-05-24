@@ -42,7 +42,7 @@ if ($user = $result->fetch_assoc()) {
         $_SESSION['username'] = $username;
 
         // Redirecionar para index.html
-        header("Location: index.html");
+        header("Location: index.php");
         exit;
     }
 } else {

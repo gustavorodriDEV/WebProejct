@@ -12,13 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['Po
     $postID = intval($_POST['PostID']);
     $username = htmlspecialchars($_POST['username']);
     $conteudo = $conn->real_escape_string(htmlspecialchars($_POST['conteudo']));
+    date_default_timezone_set('America/Sao_Paulo');
 
+    // Cria um objeto DateTime para a data e hora atual
+    $DataDeComentario = new DateTime();
+    $dataHora = $DataDeComentario->format('Y-m-d H:i:s'); // Formata a data e hora para uma string compatível com SQL
 
-    // SQL para inserir o novo comentário junto com o username
-    $sql = "INSERT INTO comentarios (PostID, Username, Conteudo) VALUES (?, ?, ?)";
+    // SQL para inserir o novo comentário junto com a data e hora
+    $sql = "INSERT INTO comentarios (PostID, Username, Conteudo, DataDeComentario) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
-        $stmt->bind_param("iss", $postID, $username, $conteudo);
+        $stmt->bind_param("isss", $postID, $username, $conteudo, $dataHora);
         $stmt->execute();
         $stmt->close();
 
