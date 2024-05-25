@@ -15,6 +15,7 @@ class autenticacao {
             exit();
         }
         error_log("Usuário logado: " . $_SESSION['username']);
+        define('USERNAME', $_SESSION['username']);  // Define a constante após a autenticação
     }
 
     public static function setUser($username) {
@@ -37,13 +38,6 @@ class autenticacao {
             error_log("Nenhum nome de usuário encontrado na sessão.");
             return null;
         }
-    }
-
-    public static function logout() {
-        self::iniciarSessao();
-        session_unset();
-        session_destroy();
-        error_log("Sessão destruída e usuário deslogado.");
     }
 }
 ?>
