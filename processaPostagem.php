@@ -20,20 +20,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $anoDeLancamento = filter_input(INPUT_POST, 'releaseYear', FILTER_SANITIZE_NUMBER_INT);
     $descricao = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
 
-    $sql = "INSERT INTO posts (Titulo, Categoria, Diretor, DataDeLancamento, Descricao) 
-            VALUES (?, ?, ?, ?, ?)";
+    // Processando o upload da imagem
+    $diretorio = "img/"; // Verifique se esta pasta existe no seu servidor
+    $caminhoArquivo = $diretorio . basename($_FILES["imagePath"]["name"]);
+
+    // Certifique-se de que o diretório de destino exista
+    if (!file_exists($diretorio)) {
+        mkdir($diretorio, 0777, true);
+    }
+
+    if (move_uploaded_file($_FILES["imagePath"]["tmp_name"], $caminhoArquivo)) {
+        echo "O arquivo " . htmlspecialchars(basename($_FILES["imagePath"]["name"])) . " foi carregado.";
+    } else {
+        echo "Erro ao carregar o arquivo.";
+    }
+
+    // Preparando a consulta SQL para inserção
+    $sql = "INSERT INTO posts (Titulo, Categoria, Diretor, DataDeLancamento, Descricao, Caminho_Imagem) 
+            VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-
     if ($stmt === false) {
         die("Erro na preparação: " . $conn->error);
     }
 
-    $stmt->bind_param("sssis", $titulo, $categoria, $diretor, $anoDeLancamento, $descricao);
+    // Vinculando parâmetros e executando
+    $stmt->bind_param("sssiis", $titulo, $categoria, $diretor, $anoDeLancamento, $descricao, $caminhoArquivo);
     if ($stmt->execute()) {
-        echo "Nova postsagem criada com sucesso!";
+        echo "Nova postagem criada com sucesso!";
     } else {
-        echo "Erro: " . $stmt->error;
+        echo "Erro ao inserir dados: " . $stmt->error;
     }
 
     $stmt->close();

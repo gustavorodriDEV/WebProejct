@@ -93,46 +93,53 @@
 
         </style>
     </head>
-    <body>
-        <!-- Este código estará na página onde estão listadas as postagens -->
-        <?php
-        $conn = new mysqli('localhost', 'root', '', 'webPro');
-        if ($conn->connect_error) {
-            die("Conexão falhou: " . $conn->connect_error);
-        }
-
-   $sql = "SELECT PostID, Titulo, Diretor, Categoria, DataDeLancamento, Descricao FROM posts ORDER BY DataDeLancamento DESC";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo '<div class="content">';
-        echo '    <div class="movie-details">';
-        echo '        <div class="movie-info">';
-        echo '            <strong>Título do filme:</strong> ' . htmlspecialchars($row['Titulo']);
-        echo '            <br><strong>Diretor:</strong> ' . htmlspecialchars($row['Diretor']);
-        echo '            <br><strong>Categoria:</strong> ' . htmlspecialchars($row['Categoria']);
-        echo '            <br><strong>Ano:</strong> ' . date('Y', strtotime($row['DataDeLancamento']));
-        echo '        </div>';
-        echo '        <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
-        echo '        <!-- Formulário para redirecionar para a página de comentários com todos os dados da postagem -->';
-        echo '        <form action="comments_page.php" method="POST">';
-        echo '            <input type="hidden" name="PostID" value="' . htmlspecialchars($row['PostID']) . '">';
-        echo '            <input type="hidden" name="Titulo" value="' . htmlspecialchars($row['Titulo']) . '">';
-        echo '            <input type="hidden" name="Diretor" value="' . htmlspecialchars($row['Diretor']) . '">';
-        echo '            <input type="hidden" name="Categoria" value="' . htmlspecialchars($row['Categoria']) . '">';
-        echo '            <input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($row['DataDeLancamento']) . '">';
-        echo '            <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
-        echo '            <button type="submit" class="comment-button">Ver Comentários</button>';
-        echo '        </form>';
-        echo '    </div>';
-        echo '</div>';
+ <body>
+    <!-- Este código estará na página onde estão listadas as postagens -->
+    <?php
+    $conn = new mysqli('localhost', 'root', '', 'webPro');
+    if ($conn->connect_error) {
+        die("Conexão falhou: " . $conn->connect_error);
     }
-} else {
-    echo "<p>Nenhuma mídia cadastrada.</p>";
-}
-$conn->close();
-?>
+
+    // Incluímos a coluna CaminhoImagem na seleção
+    $sql = "SELECT PostID, Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Caminho_Imagem FROM posts ORDER BY DataDeLancamento DESC";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<div class="content">';
+            echo '    <div class="movie-details">';
+            echo '        <div class="movie-info">';
+            echo '            <strong>Título do filme:</strong> ' . htmlspecialchars($row['Titulo']);
+            echo '            <br><strong>Diretor:</strong> ' . htmlspecialchars($row['Diretor']);
+            echo '            <br><strong>Categoria:</strong> ' . htmlspecialchars($row['Categoria']);
+            echo '            <br><strong>Ano:</strong> ' . date('Y', strtotime($row['DataDeLancamento']));
+            echo '        </div>';
+            // Exibindo a imagem
+            echo '        <div class="movie-image">';
+            echo '            <img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="width: 100%; max-width: 400px;">';
+            echo '        </div>';
+            echo '        <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
+            echo '        <!-- Formulário para redirecionar para a página de comentários com todos os dados da postagem -->';
+            echo '        <form action="comments_page.php" method="POST">';
+            echo '            <input type="hidden" name="PostID" value="' . htmlspecialchars($row['PostID']) . '">';
+            echo '            <input type="hidden" name="Titulo" value="' . htmlspecialchars($row['Titulo']) . '">';
+            echo '            <input type="hidden" name="Diretor" value="' . htmlspecialchars($row['Diretor']) . '">';
+            echo '            <input type="hidden" name="Categoria" value="' . htmlspecialchars($row['Categoria']) . '">';
+            echo '            <input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($row['DataDeLancamento']) . '">';
+            echo '            <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
+            echo '            <button type="submit" class="comment-button">Ver Comentários</button>';
+            echo '        </form>';
+            echo '    </div>';
+            echo '</div>';
+        }
+    } else {
+        echo "<p>Nenhuma mídia cadastrada.</p>";
+    }
+    $conn->close();
+    ?>
+</body>
+
     }
     
 </body>

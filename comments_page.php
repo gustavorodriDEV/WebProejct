@@ -129,104 +129,85 @@ autenticacao::checkLogin();
 
         </style>
     </head>
-    <body>
-        <div class="content">
-            <?php
-            // Verificar se os dados foram enviados pelo método POST
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $conn = new mysqli('localhost', 'root', '', 'webPro');
-                if ($conn->connect_error) {
-                    die("Conexão falhou: " . $conn->connect_error);
-                }
+<body>
+    <div class="content">
+        <?php
+        // Verificar se os dados foram enviados pelo método POST
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $conn = new mysqli('localhost', 'root', '', 'webPro');
+            if ($conn->connect_error) {
+                die("Conexão falhou: " . $conn->connect_error);
+            }
 
-                $postID = intval($_POST['PostID']);
-                $titulo = htmlspecialchars($_POST['Titulo']);
-                $diretor = htmlspecialchars($_POST['Diretor']);
-                $categoria = htmlspecialchars($_POST['Categoria']);
-                $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
-                $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
-                //$username = $_SESSION['username'];
+            $postID = intval($_POST['PostID']);
+            $titulo = htmlspecialchars($_POST['Titulo']);
+            $diretor = htmlspecialchars($_POST['Diretor']);
+            $categoria = htmlspecialchars($_POST['Categoria']);
+            $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
+            $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
+            //$username = $_SESSION['username']; // Descomente e ajuste conforme seu sistema de login
 
+            // Query para buscar detalhes da postagem incluindo o caminho da imagem
+            $sql = "SELECT Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Caminho_Imagem FROM posts WHERE PostID = $postID";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
                 echo '<div class="movie-info">';
                 echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
                 echo '<strong>Diretor:</strong> ' . $diretor . '<br>';
                 echo '<strong>Categoria:</strong> ' . $categoria . '<br>';
                 echo '<strong>Data de Lançamento:</strong> ' . $dataDeLancamento . '<br>';
-                echo '</div>';
                 echo '<div class="movie-description">' . $descricao . '</div>';
+                // Adicionando a imagem
+                echo '<img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="max-width: 100%; height: auto;">';
+                echo '</div>';
 
-                // Verificar se o PostID existe na tabela posts
-                $sqlVerificaPostID = "SELECT PostID FROM posts WHERE PostID = $postID";
-                $resultVerificaPostID = $conn->query($sqlVerificaPostID);
+                // Lógica de comentários
+                $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
+                $resultComentarios = $conn->query($sqlComentarios);
+                $commentsHTML = ''; // Inicializa uma string vazia para armazenar os comentários
 
-                if ($resultVerificaPostID->num_rows > 0) {
-                    // Inserir um novo comentário se o formulário de comentários foi enviado
-                    if (isset($_POST['novoComentario'])) {
-                        $conteudo = $conn->real_escape_string(htmlspecialchars($_POST['conteudo']));
-                        $dataComentario = date("Y-m-d H:i:s");
-
-                        $sqlInsert = "INSERT INTO comentarios (Conteudo, DataDeComentario, PostID) VALUES ('$conteudo', '$dataComentario', $postID)";
-                        if ($conn->query($sqlInsert) !== TRUE) {
-                            echo "Erro ao inserir comentário: " . $conn->error;
-                        } else {
-                            echo "Comentário inserido com sucesso.";
-                        }
-                    }
-
-                    $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
-                    $resultComentarios = $conn->query($sqlComentarios);
-
-                    $commentsHTML = ''; // Inicializa uma string vazia para armazenar os comentários
-                    // Exibir os comentários
-                    if ($resultComentarios->num_rows > 0) {
-                        $commentsHTML .= '<div class="comments-section">';
-                        $commentsHTML .= '<h3>Comentários</h3>';
-                        while ($row = $resultComentarios->fetch_assoc()) {
-                            $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
-                            $username = htmlspecialchars($row['Username']);
-                            $data = htmlspecialchars($row['DataDeComentario']);
-                            $dataFormatada = date('d/m/Y H:i:s', strtotime($data));  // Formata a data e hora
-
-                            $commentsHTML .= '<div class="comment">';
-                            $commentsHTML .= '<strong>' . $username . '</strong> <span>' . $dataFormatada . '</span><br>';  // Exibir nome de usuário e data
-                            $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
-                            $commentsHTML .= '</div>';
-                        }
+                if ($resultComentarios->num_rows > 0) {
+                    $commentsHTML .= '<div class="comments-section">';
+                    $commentsHTML .= '<h3>Comentários</h3>';
+                    while ($row = $resultComentarios->fetch_assoc()) {
+                        $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
+                        $username = htmlspecialchars($row['Username']);
+                        $data = htmlspecialchars($row['DataDeComentario']);
+                        $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
+                        $commentsHTML .= '<div class="comment">';
+                        $commentsHTML .= '<strong>' . $username . '</strong> <span>' . $dataFormatada . '</span><br>';
+                        $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
                         $commentsHTML .= '</div>';
-                    } else {
-                        $commentsHTML .= '<p>Sem comentários.</p>';
                     }
-
-                    if ($resultComentarios === false) {
-                        echo "<p>PostID inválido.</p>";
-                    }
-
-                    $conn->close();
-
+                    $commentsHTML .= '</div>';
                 } else {
-                    echo "<p>Post não encontrado.</p>";
+                    $commentsHTML .= '<p>Sem comentários.</p>';
                 }
+            } else {
+                echo "<p>Post não encontrado.</p>";
             }
-            ?>
-        </div> 
+            $conn->close();
+        }
+        ?>
+    </div> 
 
-        <div>
+    <div>
+        <?php
+        echo $commentsHTML;
+        ?>
+    </div>
 
-            <?php
-            echo $commentsHTML;
-            ?>
-        </div>
-
-        <div class="add-comment">
-            <h3>Faça um Comentário  </h3>
-            <form action="inserecomentario.php" method="POST">
-                <!-- Campo oculto para PostID -->
-                <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
-
-                <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
-                <textarea id="conteudo" name="conteudo" required></textarea>
-                <input type="submit" value="Enviar">
-            </form>
-        </div>
-    </body>
+    <div class="add-comment">
+        <h3>Faça um Comentário</h3>
+        <form action="inserecomentario.php" method="POST">
+            <!-- Campo oculto para PostID -->
+            <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
+            <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
+            <textarea id="conteudo" name="conteudo" required></textarea>
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+</body>
 </html>
