@@ -15,19 +15,31 @@ $name = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
+// Verifique se o e-mail é válido
+if (!$email) {
+    echo "Endereço de e-mail inválido.";
+    exit;
+}
 
-// Inserir dados no banco
-$sql = "INSERT INTO perfilusuario (NomeCompleto, email, senha) VALUES (?, ?, ?)";
+// Hashing da senha antes de armazenar no banco de dados
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+// Inserir dados no banco, incluindo a data de criação
+$sql = "INSERT INTO perfilusuario (nomeUsuario, email, senha, DataDeCriacao) VALUES (?, ?, ?, CURDATE())";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $name, $email, $password);
+if (!$stmt) {
+    echo "Erro ao preparar a declaração: " . htmlspecialchars($conn->error);
+    exit;
+}
+
+$stmt->bind_param("sss", $name, $email, $hashedPassword);
 
 if ($stmt->execute()) {
-    // Não imprima nada se você for redirecionar.
     // Redirecionar para a tela de login
     header('Location: login.html');
     exit();
 } else {
-    // Somente imprima erros se o cadastro falhar
+    // Imprimir erros se o cadastro falhar
     echo "Erro ao cadastrar usuário: " . $stmt->error;
 }
 
