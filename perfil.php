@@ -9,43 +9,6 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-$diretorio = "imgUsuario/";
-if (!file_exists($diretorio)) {
-    mkdir($diretorio, 0755, true);
-}
-
-if (isset($_FILES['image']) && $_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['action'] == 'upload') {
-    $caminhoArquivo = $diretorio . basename($_FILES['image']['name']);
-    if ($_FILES['image']['error'] == 0) {
-        $fileType = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
-        if (in_array(strtolower($fileType), $allowedTypes)) {
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $caminhoArquivo)) {
-                $stmt = $conn->prepare("UPDATE perfilusuario SET fotoPerfil = ? WHERE nomeUsuario = ?");
-                $stmt->bind_param("ss", $caminhoArquivo, $nomeUsuario);
-                $stmt->execute();
-                $stmt->close();
-                header("Refresh:0");
-            } else {
-                echo "Erro ao mover o arquivo.";
-            }
-        } else {
-            echo "Tipo de arquivo não permitido.";
-        }
-    } else {
-        echo "Erro no upload: " . $_FILES['image']['error'];
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST['action'])) {
-    $novaBiografia = !empty($_POST['biografia']) ? $_POST['biografia'] : 'Sem descrição';
-    $stmt = $conn->prepare("UPDATE perfilusuario SET biografia = ? WHERE nomeUsuario = ?");
-    $stmt->bind_param("ss", $novaBiografia, $nomeUsuario);
-    $stmt->execute();
-    $stmt->close();
-    header("Refresh:0");
-}
-
 // Após recuperar os dados do banco de dados
 $stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
 $stmt->bind_param("s", $nomeUsuario);
@@ -54,29 +17,41 @@ $stmt->bind_result($nomeUsuarioRetornado, $biografia, $dataDeCriacao, $fotoPerfi
 $stmt->fetch();
 $stmt->close();
 $conn->close();
+// Definir o fuso horário, se necessário, para garantir consistência
+date_default_timezone_set('America/Sao_Paulo');
 
-if ($dataDeCriacao) {
-    $dataDeCriacao = new DateTime($dataDeCriacao);
-    $dataAtual = new DateTime();
-    $intervalo = $dataDeCriacao->diff($dataAtual);
-    $diasDeConta = $intervalo->days;
-} else {
-    $diasDeConta = 0;
-}
+// Supondo que $dataDeCriacao seja recuperada do banco de dados como uma string
+$dataDeCriacao = new DateTime($dataDeCriacao);
+$dataAtual = new DateTime();
 
-if ($diasDeConta == 0) {
+// Formatar ambas as datas para remover a hora
+$dataDeCriacaoFormatada = $dataDeCriacao->format('Y-m-d');
+$dataAtualFormatada = $dataAtual->format('Y-m-d');
+
+// Comparar as datas formatadas
+if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
     $mensagemDiasConta = "hoje";
-} elseif ($diasDeConta == 1) {
-    $mensagemDiasConta = "1 dia atrás";
-} elseif ($diasDeConta < 7) {
-    $mensagemDiasConta = "$diasDeConta dias atrás";
-} elseif ($diasDeConta < 30) {
-    $mensagemDiasConta = "há " . floor($diasDeConta / 7) . " semanas";
-} elseif ($diasDeConta < 365) {
-    $mensagemDiasConta = "há " . floor($diasDeConta / 30) . " meses";
 } else {
-    $mensagemDiasConta = "há mais de um ano";
+    // Se não for hoje, calcular o número total de dias desde a criação
+    $dataDeCriacao->setTime(0, 0, 0);
+    $dataAtual->setTime(0, 0, 0);
+    $intervalo = $dataDeCriacao->diff($dataAtual);
+    $totalDias = $intervalo->days;
+
+    if ($totalDias == 1) {
+        $mensagemDiasConta = "há 1 dia atrás";
+    } elseif ($totalDias < 7) {
+        $mensagemDiasConta = "há $totalDias dias atrás";
+    } elseif ($totalDias < 30) {
+        $mensagemDiasConta = "há " . floor($totalDias / 7) . " semana(s)";
+    } elseif ($totalDias < 365) {
+        $mensagemDiasConta = "há " . floor($totalDias / 30) . " mês(es)";
+    } else {
+        $mensagemDiasConta = "há " . floor($totalDias / 365) . " ano(s)";
+    }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -96,51 +71,53 @@ if ($diasDeConta == 0) {
         </style>
     </head>
     <body>
-        <div class="avatar" onclick="document.getElementById('fileInput').click();">
+        <div class="avatar">
             <?php if (isset($fotoPerfil) && file_exists($fotoPerfil)): ?>
                 <img src="<?php echo htmlspecialchars($fotoPerfil); ?>" alt="Foto de perfil" class="profile-image">
             <?php else: ?>
                 <i class="fas fa-user-circle avatar-icon" style="font-size: 150px;"></i>
             <?php endif; ?>
-            <form method="POST" action="" enctype="multipart/form-data">
-                <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
-                <input type="hidden" name="action" value="upload">
-            </form>
             <div class="user-name"><?php echo htmlspecialchars($nomeUsuario); ?></div>
         </div>
 
-
-
-
         <div class="info-container">
-            <div class="line-separator"></div>
             <div class="name-description">
                 <p id="userNameDisplay" class="placeholder-text"><?php echo htmlspecialchars($nomeUsuarioRetornado); ?></p>
                 <p id="userBioDisplay" class="placeholder-text"><?php echo htmlspecialchars($biografia); ?></p>
-                <?php if ($nomeUsuario === $nomeUsuarioRetornado): ?>
-                    <form method="POST" action="">
-                        <button type="button" id="openModalButton">Alterar</button>
-                    </form>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <div id="infoModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
                 <form method="POST" action="">
-                    <label for="userDescriptionDisplay">Biografia:</label>
-                    <textarea id="userDescriptionDisplay" name="biografia"><?php echo htmlspecialchars($biografia); ?></textarea>
-                    <button type="submit" id="submitInfo">Salvar Alterações</button>
+                    <button type="button" id="openModalButton">Alterar</button>
                 </form>
             </div>
         </div>
+
+
+        <div id="infoModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
+                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                    <label for="bio" style="color: white;">Biografia:</label>
+                    <textarea id="bio" name="bio" rows="4" cols="50"></textarea>
+                    <input type="hidden" name="action" value="updateBio">
+                    <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
+                </form>
+                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                    <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
+                    <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
+                    <input type="hidden" name="action" value="uploadFoto">
+                </form>
+                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="removeFoto">
+                    <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
+                </form>
+            </div>
+        </div>
+
+
 
         <!-- Exibição da data de criação e dos dias de conta -->
         <div class="date-container" style="text-align: center; margin-top: 20px;">
             <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
             <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
-
         </div>
 
         <script src="scripts.js"></script>
