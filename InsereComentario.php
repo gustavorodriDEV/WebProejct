@@ -1,5 +1,5 @@
 <?php
-
+require_once 'autenticacao.php';
 // Conectar ao banco de dados
 $conn = new mysqli('localhost', 'root', '', 'webPro');
 if ($conn->connect_error) {
@@ -10,7 +10,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['PostID'], $_POST['username'])) {
     // Capturar e sanitizar os dados enviados via POST
     $postID = intval($_POST['PostID']);
-    $username = htmlspecialchars($_POST['username']);
+    $username = autenticacao::getUsername();
     $conteudo = $conn->real_escape_string(htmlspecialchars($_POST['conteudo']));
     date_default_timezone_set('America/Sao_Paulo');
 

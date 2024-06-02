@@ -166,7 +166,7 @@ autenticacao::checkLogin();
                 // Lógica de comentários
                 $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
                 $resultComentarios = $conn->query($sqlComentarios);
-                $commentsHTML = ''; // Inicializa uma string vazia para armazenar os comentários
+                $commentsHTML = ''; 
 
                 if ($resultComentarios->num_rows > 0) {
                     $commentsHTML .= '<div class="comments-section">';
