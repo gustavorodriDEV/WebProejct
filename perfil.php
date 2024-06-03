@@ -4,6 +4,7 @@ require_once 'autenticacao.php';
 autenticacao::checkLogin();
 $nomeUsuario = autenticacao::getUsername();
 
+
 $conn = new mysqli('localhost', 'root', '', 'webPro');
 if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
@@ -17,22 +18,20 @@ $stmt->bind_result($nomeUsuarioRetornado, $biografia, $dataDeCriacao, $fotoPerfi
 $stmt->fetch();
 $stmt->close();
 $conn->close();
-// Definir o fuso horário, se necessário, para garantir consistência
+
 date_default_timezone_set('America/Sao_Paulo');
 
-// Supondo que $dataDeCriacao seja recuperada do banco de dados como uma string
+
 $dataDeCriacao = new DateTime($dataDeCriacao);
 $dataAtual = new DateTime();
 
-// Formatar ambas as datas para remover a hora
+
 $dataDeCriacaoFormatada = $dataDeCriacao->format('Y-m-d');
 $dataAtualFormatada = $dataAtual->format('Y-m-d');
 
-// Comparar as datas formatadas
 if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
     $mensagemDiasConta = "hoje";
 } else {
-    // Se não for hoje, calcular o número total de dias desde a criação
     $dataDeCriacao->setTime(0, 0, 0);
     $dataAtual->setTime(0, 0, 0);
     $intervalo = $dataDeCriacao->diff($dataAtual);
@@ -62,12 +61,18 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         <link rel="stylesheet" href="estilos.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <style>
-            .profile-image {
-                border-radius: 50%;
-                width: 150px;
-                height: 150px;
-                object-fit: cover;
-            }
+   body {
+    font-family: 'Arial', sans-serif;
+    background-image: linear-gradient(to bottom, #6e45e2, #88d3ce, #ffcc2f);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Adiciona esta linha para empilhar verticalmente */
+    align-items: center; /* Centraliza os elementos horizontalmente */
+    justify-content: center; /* Centraliza os elementos verticalmente na página */
+    height: 100vh;
+}
+
         </style>
     </head>
     <body>

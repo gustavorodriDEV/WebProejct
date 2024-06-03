@@ -102,15 +102,21 @@ autenticacao::checkLogin();  // Verifica se o usuário está logado
     }
 
     // Incluímos a coluna CaminhoImagem na seleção
-    $sql = "SELECT PostID, Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Caminho_Imagem FROM posts ORDER BY DataDeLancamento DESC";
-    $result = $conn->query($sql);
-
+    $sql = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil
+        FROM posts p
+        LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
+        ORDER BY p.DataDeLancamento DESC";
+$result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo '<div class="content">';
             echo '    <div class="movie-details">';
             echo '        <div class="movie-info">';
             echo '            <strong>Título do filme:</strong> ' . htmlspecialchars($row['Titulo']);
+            echo '            <strong>Dono do Post:</strong> ' . htmlspecialchars($row['username']);
+             echo '        <div class="movie-image">';
+            echo '            <img src="' . htmlspecialchars($row['FotoPerfil']) . '" alt="Imagem do filme" style="width: 100%; max-width: 400px;">';
+            echo '        </div>';
             echo '            <br><strong>Diretor:</strong> ' . htmlspecialchars($row['Diretor']);
             echo '            <br><strong>Categoria:</strong> ' . htmlspecialchars($row['Categoria']);
             echo '            <br><strong>Ano:</strong> ' . date('Y', strtotime($row['DataDeLancamento']));

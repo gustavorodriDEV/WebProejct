@@ -1,13 +1,19 @@
 <?php
 require_once 'autenticacao.php';
+require_once 'visitarUsuario.php';  // Inclui a classe VisitarUsuario
+
 autenticacao::checkLogin();
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
         <title>Detalhes do Filme</title>
+        <link rel="stylesheet" href="modal.css">
+
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -129,85 +135,111 @@ autenticacao::checkLogin();
 
         </style>
     </head>
-<body>
-    <div class="content">
-        <?php
-        // Verificar se os dados foram enviados pelo método POST
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $conn = new mysqli('localhost', 'root', '', 'webPro');
-            if ($conn->connect_error) {
-                die("Conexão falhou: " . $conn->connect_error);
-            }
-
-            $postID = intval($_POST['PostID']);
-            $titulo = htmlspecialchars($_POST['Titulo']);
-            $diretor = htmlspecialchars($_POST['Diretor']);
-            $categoria = htmlspecialchars($_POST['Categoria']);
-            $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
-            $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
-            //$username = $_SESSION['username']; // Descomente e ajuste conforme seu sistema de login
-
-            // Query para buscar detalhes da postagem incluindo o caminho da imagem
-            $sql = "SELECT Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Caminho_Imagem FROM posts WHERE PostID = $postID";
-            $result = $conn->query($sql);
-
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                echo '<div class="movie-info">';
-                echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
-                echo '<strong>Diretor:</strong> ' . $diretor . '<br>';
-                echo '<strong>Categoria:</strong> ' . $categoria . '<br>';
-                echo '<strong>Data de Lançamento:</strong> ' . $dataDeLancamento . '<br>';
-                echo '<div class="movie-description">' . $descricao . '</div>';
-                // Adicionando a imagem
-                echo '<img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="max-width: 100%; height: auto;">';
-                echo '</div>';
-
-                // Lógica de comentários
-                $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
-                $resultComentarios = $conn->query($sqlComentarios);
-                $commentsHTML = ''; 
-
-                if ($resultComentarios->num_rows > 0) {
-                    $commentsHTML .= '<div class="comments-section">';
-                    $commentsHTML .= '<h3>Comentários</h3>';
-                    while ($row = $resultComentarios->fetch_assoc()) {
-                        $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
-                        $username = htmlspecialchars($row['Username']);
-                        $data = htmlspecialchars($row['DataDeComentario']);
-                        $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
-                        $commentsHTML .= '<div class="comment">';
-                        $commentsHTML .= '<strong>' . $username . '</strong> <span>' . $dataFormatada . '</span><br>';
-                        $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
-                        $commentsHTML .= '</div>';
-                    }
-                    $commentsHTML .= '</div>';
-                } else {
-                    $commentsHTML .= '<p>Sem comentários.</p>';
+    <body>
+        <div class="content">
+            <?php
+            
+// Verificar se os dados foram enviados pelo método POST
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $conn = new mysqli('localhost', 'root', '', 'webPro');
+                if ($conn->connect_error) {
+                    die("Conexão falhou: " . $conn->connect_error);
                 }
-            } else {
-                echo "<p>Post não encontrado.</p>";
+
+                $postID = intval($_POST['PostID']);
+                $titulo = htmlspecialchars($_POST['Titulo']);
+                $diretor = htmlspecialchars($_POST['Diretor']);
+                $categoria = htmlspecialchars($_POST['Categoria']);
+                $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
+                $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
+                //$username = $_SESSION['username']; // Descomente e ajuste conforme seu sistema de login
+                // Query para buscar detalhes da postagem incluindo o caminho da imagem
+                $sql = "SELECT Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Caminho_Imagem FROM posts WHERE PostID = $postID";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    echo '<div class="movie-info">';
+                    echo '<strong>Título do filme:</strong> ' . $titulo . '<br>';
+                    echo '<strong>Diretor:</strong> ' . $diretor . '<br>';
+                    echo '<strong>Categoria:</strong> ' . $categoria . '<br>';
+                    echo '<strong>Data de Lançamento:</strong> ' . $dataDeLancamento . '<br>';
+                    echo '<div class="movie-description">' . $descricao . '</div>';
+                    // Adicionando a imagem
+                    echo '<img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="max-width: 100%; height: auto;">';
+                    echo '</div>';
+
+                    // Lógica de comentários
+                    $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
+                    $resultComentarios = $conn->query($sqlComentarios);
+                    $commentsHTML = '';
+
+                    if ($resultComentarios->num_rows > 0) {
+                        $commentsHTML .= '<div class="comments-section">';
+                        $commentsHTML .= '<h3>Comentários</h3>';
+
+                        while ($row = $resultComentarios->fetch_assoc()) {
+                            $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
+                            $username = htmlspecialchars($row['Username']);
+                            $data = htmlspecialchars($row['DataDeComentario']);
+                            $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
+
+                            $commentsHTML .= "<div class='comment'>";
+                            $commentsHTML .= "<strong><a href='#' onclick=\"openUserProfileModal('" . htmlspecialchars($username) . "'); return false;\">" . htmlspecialchars($username) . "</a></strong> <span>" . $dataFormatada . "</span><br>";
+
+
+                            $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
+                            $commentsHTML .= '</div>';
+                        }
+
+                        $commentsHTML .= '</div>';
+                    } else {
+                        $commentsHTML .= '<p>Sem comentários.</p>';
+                    }
+                } else {
+                    echo "<p>Post não encontrado.</p>";
+                }
+                $conn->close();
             }
-            $conn->close();
-        }
-        ?>
-    </div> 
+            ?>
+           
+        </div> 
 
-    <div>
-        <?php
-        echo $commentsHTML;
-        ?>
-    </div>
 
-    <div class="add-comment">
-        <h3>Faça um Comentário</h3>
-        <form action="inserecomentario.php" method="POST">
-            <!-- Campo oculto para PostID -->
-            <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
-            <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
-            <textarea id="conteudo" name="conteudo" required></textarea>
-            <input type="submit" value="Enviar">
-        </form>
+        <div>
+            <?php
+            echo $commentsHTML;
+            ?>
+        </div>
+
+        <div class="add-comment">
+            <h3>Faça um Comentário</h3>
+            <form action="inserecomentario.php" method="POST">
+                <!-- Campo oculto para PostID -->
+                <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
+                <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
+                <textarea id="conteudo" name="conteudo" required></textarea>
+                <input type="submit" value="Enviar">
+            </form>
+        </div>
+        
+  <div id="userProfileModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeUserProfileModal()">&times;</span>
+        <?php if ($perfilUsuario): ?>
+            <div class="avatar">
+                <!-- Adicionar lógica para mostrar imagem, se disponível -->
+            </div>
+            <div id="modalUsername"><?php echo htmlspecialchars($perfilUsuario['nomeUsuario']); ?></div>
+            <p id="modalBio"><?php echo htmlspecialchars($perfilUsuario['biografia']); ?></p>
+            <p>Entrou em: <span id="modalJoinedDate"><?php echo (new DateTime($perfilUsuario['dataDeCriacao']))->format('d/m/Y'); ?></span></p>
+            <p>Conta criada há: <span id="modalAccountAge"><?php echo $mensagemDiasConta; ?></span></p>
+        <?php else: ?>
+            <p>Usuário não encontrado.</p>
+        <?php endif; ?>
+            <script src="modal.js"></script>
     </div>
-</body>
+ 
+    </body>
+
 </html>

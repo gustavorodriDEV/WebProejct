@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $diretor = filter_input(INPUT_POST, 'director', FILTER_SANITIZE_STRING);
     $anoDeLancamento = filter_input(INPUT_POST, 'releaseYear', FILTER_SANITIZE_NUMBER_INT);
     $descricao = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
-
+    $User = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     // Processando o upload da imagem
     $diretorio = "img/"; // Verifique se esta pasta existe no seu servidor
     $caminhoArquivo = $diretorio . basename($_FILES["imagePath"]["name"]);
@@ -36,8 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Preparando a consulta SQL para inserção
-    $sql = "INSERT INTO posts (Titulo, Categoria, Diretor, DataDeLancamento, Descricao, Caminho_Imagem) 
-            VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO posts (username, Titulo, Categoria, Diretor, DataDeLancamento, Descricao, Caminho_Imagem) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Vinculando parâmetros e executando
-    $stmt->bind_param("sssiis", $titulo, $categoria, $diretor, $anoDeLancamento, $descricao, $caminhoArquivo);
+    $stmt->bind_param("ssssiis",$User, $titulo, $categoria, $diretor, $anoDeLancamento, $descricao, $caminhoArquivo);
     if ($stmt->execute()) {
         echo "Nova postagem criada com sucesso!";
     } else {

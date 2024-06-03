@@ -1,7 +1,7 @@
 <?php
 require_once 'autenticacao.php';  
 autenticacao::checkLogin();  
-
+$username = autenticacao::getUsername();
 include 'navBar.php';
 echo $GLOBALS['navbar']; 
 
@@ -135,45 +135,48 @@ echo $GLOBALS['navbar'];
   </head>
 <body>
     <div class="container">
-        <h1>Nova Postagem</h1>
-        <form action="processaPostagem.php" method="post" enctype="multipart/form-data">
+ <div class="content">
+    <h1>Nova Postagem</h1>
+    <form action="processaPostagem.php" method="post" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label for="title">Título</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+
+        <div class="form-row">
             <div class="form-group">
-                <label for="title">Título</label>
-                <input type="text" id="title" name="title" required> <!-- Adicionei o atributo 'required' -->
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="categories">Categorias</label>
-                    <input type="text" id="categories" name="categories" required> <!-- Adicionei o atributo 'required' -->
-                </div>
-
-                <div class="form-group">
-                    <label for="director">Diretor</label>
-                    <input type="text" id="director" name="director" placeholder="Nome do diretor" required> <!-- Adicionei o atributo 'required' -->
-                </div>
-
-                <div class="form-group">
-                    <label for="releaseYear">Ano de Lançamento</label>
-                    <input type="number" id="releaseYear" name="releaseYear" placeholder="Ano" min="1960" max="2024" required> <!-- Adicionei o atributo 'required' -->
-                </div>
+                <label for="categories">Categorias</label>
+                <input type="text" id="categories" name="categories" required>
             </div>
 
             <div class="form-group">
-                <label for="description">Descrição</label>
-                <textarea id="description" name="description" required></textarea> <!-- Adicionei o atributo 'required' -->
+                <label for="director">Diretor</label>
+                <input type="text" id="director" name="director" placeholder="Nome do diretor" required>
             </div>
 
             <div class="form-group">
-                <label for="imagePath">Imagem</label>
-                <input type="file" id="imagePath" name="imagePath" accept="image/*" required> <!-- Adicionei o atributo 'required' -->
+                <label for="releaseYear">Ano de Lançamento</label>
+                <input type="number" id="releaseYear" name="releaseYear" placeholder="Ano" min="1960" max="2024" required>
             </div>
+        </div>
 
-            <div class="buttons">
-                <button type="submit">Publicar</button>
-                <button type="button" onclick="window.history.back();">Cancelar</button> <!-- Melhorei o botão cancelar para voltar à página anterior -->
-            </div>
-        </form>
-    </div>
+        <div class="form-group">
+            <label for="description">Descrição</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="imagePath">Imagem</label>
+            <input type="file" id="imagePath" name="imagePath" accept="image/*" required>
+        </div>
+
+        <div class="buttons">
+            <button type="submit">Publicar</button>
+            <button type="button" onclick="window.history.back();">Cancelar</button>
+                 <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+        </div>
+    </form>
+</div>
 </body>
 </html>
