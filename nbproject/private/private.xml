@@ -4,11 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/webProject/modal.js</file>
-            <file>file:/C:/xampp/htdocs/webProject/estilos.css</file>
+            <file>file:/C:/xampp/htdocs/webProject/processaPostagem.php</file>
             <file>file:/C:/xampp/htdocs/webProject/PerfilComment.php</file>
-            <file>file:/C:/xampp/htdocs/webProject/modal.css</file>
-            <file>file:/C:/xampp/htdocs/webProject/scripts.js</file>
+            <file>file:/C:/xampp/htdocs/webProject/postagemUsuario.html</file>
+            <file>file:/C:/xampp/htdocs/webProject/updatePerfil.php</file>
             <file>file:/C:/xampp/htdocs/webProject/visitarUsuario.php</file>
+            <file>file:/C:/xampp/htdocs/webProject/Feed.php</file>
+            <file>file:/C:/xampp/htdocs/webProject/novaPostagem.php</file>
             <file>file:/C:/xampp/htdocs/webProject/comments_page.php</file>
         </group>
     </open-files>

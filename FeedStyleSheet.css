@@ -1,0 +1,131 @@
+:root {
+    --background-color: #ece5dd;
+    --text-color: #333;
+    --font-family: 'Arial', sans-serif;
+    --button-bg-color: #f7f7f7;
+    --button-bg-hover: #e1e1e1;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --font-size-normal: 1rem;
+    --font-size-large: 1.25rem;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 90%;
+    max-width: 1024px;
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 1.25rem;
+    box-shadow: var(--box-shadow);
+}
+
+@media (min-width: 768px) {
+    .content {
+        flex-direction: row;
+        gap: 2rem;
+    }
+}
+
+.user-info {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+.profile-image {
+    width: 55px; /* Ajuste conforme necessário */
+    height: 55px; /* Ajuste conforme necessário */
+    border-radius: 50%;
+    object-fit: cover;
+    transform: translateY(-80px); 
+}
+
+.user-name {
+    font-size: 16px; /* Ajuste conforme necessário */
+    color: #333; /* Ajuste conforme necessário */
+    font-weight: bold; /* Deixa o texto em negrito */
+    transform: translateY(-80px); 
+
+}
+
+
+.back-button, .comment-button {
+    padding: 0.625rem 0.9375rem;
+    border: none;
+    background-color: var(--button-bg-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    font-size: var(--font-size-normal);
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover, .comment-button:hover {
+    background-color: var(--button-bg-hover);
+}
+
+.comment-button {
+    border-radius: 0.3125rem;
+}
+
+
+.movie-description, .movie-info {
+    text-align: justify;
+    line-height: 1.6;
+    font-size: var(--font-size-normal);
+}
+
+.movie-details {
+    display: flex;
+    flex-direction: row;  /* Elementos lado a lado */
+    align-items: center;  /* Alinha verticalmente ao centro, se necessário */
+    gap: 20px;            /* Espaço entre os elementos */
+    width: 100%;
+    max-width: 1024px;    /* Largura máxima do container */
+    margin: auto;         /* Centraliza o container na página */
+}
+
+.movie-image {
+    flex: 0 1 300px;      /* Não cresce, pode encolher, e base de 300px */
+    max-width: 300px;     /* Largura máxima da imagem */
+    display: flex;
+    justify-content: flex-start; /* Alinha a imagem à esquerda */
+    align-items: center;  /* Centraliza a imagem verticalmente */
+}
+
+.inform {
+    flex: 1 1 50%;        /* Permite que o conteúdo ocupe até 50% do espaço disponível */
+    display: flex;        /* Fazendo .inform um contêiner flexível */
+    flex-direction: column;/* Itens organizados verticalmente */
+    gap: -1px;            /* Espaço entre cada item (se o navegador suportar) */
+}
+
+.inform strong, .inform br {
+    margin-bottom: 1px;  /* Adiciona espaço abaixo de cada item */
+}
+
+@media (max-width: 768px) {
+    .movie-image {
+        flex: 1 1 100%;  /* Toma toda a largura em dispositivos menores */
+        max-width: 100%; /* Ajusta a largura máxima para a largura total */
+    }
+}
+
+
+
+
+
+
+
+
