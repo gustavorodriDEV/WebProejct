@@ -29,23 +29,24 @@ autenticacao::checkLogin();
                 echo '<div class="content">';
                 echo '    <div class="movie-details">';
                 echo '<div class="movie-info">';
-                echo '    <div class="user-info">';
+                echo '    <div class="user-info">';  // Removido o estilo inline, adicionado via CSS
                 if (empty($row['FotoPerfil'])) {
-                    echo '<i class="fas fa-user-circle avatar-icon" style="font-size: 55px; color: #777;"></i>';
+                    echo '<i class="fas fa-user-circle avatar-icon default-avatar" style="font-size: 55px; color: #777;"></i>';  // Adicionada classe para ícone padrão
                 } else {
                     echo '<img src="' . htmlspecialchars($row['FotoPerfil']) . '" alt="Perfil do usuário" class="profile-image">';
                 }
-                echo '        <span class="user-name">' . htmlspecialchars($row['username']) . '</span>';  // Adiciona o nome do usuário
+                echo '        <span class="user-name">' . htmlspecialchars($row['username']) . '</span>';
                 echo '    </div>';
+
                 echo '</div>';
                 echo '    <div class="movie-image">';  // Contém a imagem do filme
                 echo '        <img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="width: 100%; max-width: 400px;">';
                 echo '    </div>';
                 echo '<div class="inform">';
-                echo '    <div class="info-item"><strong>Título do filme:</strong> <span>' . htmlspecialchars($row['Titulo']) . '</span></div>'.'<br>';
-                echo '    <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div>'.'<br>';
-                echo '    <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div>'.'<br>';
-                echo '    <div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div>'.'<br>';
+                echo '    <div class="info-item"><strong>Título do filme:</strong> <span>' . htmlspecialchars($row['Titulo']) . '</span></div>' . '<br>';
+                echo '    <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div>' . '<br>';
+                echo '    <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div>' . '<br>';
+                echo '    <div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div>' . '<br>';
                 echo '</div>';
 
                 echo '</div>';

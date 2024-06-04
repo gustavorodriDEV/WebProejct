@@ -16,8 +16,6 @@ body {
     color: var(--text-color);
 }
 
-
-
 .content {
     display: flex;
     flex-direction: column;
@@ -43,22 +41,22 @@ body {
     gap: 10px; 
 }
 
+.default-avatar {
+    font-size: 50px; /* Reduzido de 55px para 50px */
+    color: #777;
+}
+
 .profile-image {
-    width: 55px; /* Ajuste conforme necessário */
-    height: 55px; /* Ajuste conforme necessário */
+    width: 50px; /* Reduzido de 55px para 50px */
+    height: 50px; /* Reduzido de 55px para 50px */
     border-radius: 50%;
     object-fit: cover;
-    transform: translateY(-80px); 
 }
 
-.user-name {
-    font-size: 16px; /* Ajuste conforme necessário */
-    color: #333; /* Ajuste conforme necessário */
-    font-weight: bold; /* Deixa o texto em negrito */
-    transform: translateY(-80px); 
-
+.movie-info {
+    margin-top: -130px; 
+    margin-left: -16px; /* Ajustado conforme sua necessidade */
 }
-
 
 .back-button, .comment-button {
     padding: 0.625rem 0.9375rem;
@@ -79,7 +77,6 @@ body {
     border-radius: 0.3125rem;
 }
 
-
 .movie-description, .movie-info {
     text-align: justify;
     line-height: 1.6;
@@ -88,44 +85,36 @@ body {
 
 .movie-details {
     display: flex;
-    flex-direction: row;  /* Elementos lado a lado */
-    align-items: center;  /* Alinha verticalmente ao centro, se necessário */
-    gap: 20px;            /* Espaço entre os elementos */
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
     width: 100%;
-    max-width: 1024px;    /* Largura máxima do container */
-    margin: auto;         /* Centraliza o container na página */
+    max-width: 1024px;
+    margin: auto;
 }
 
 .movie-image {
-    flex: 0 1 300px;      /* Não cresce, pode encolher, e base de 300px */
-    max-width: 300px;     /* Largura máxima da imagem */
+    flex: 0 1 300px;
+    max-width: 300px;
     display: flex;
-    justify-content: flex-start; /* Alinha a imagem à esquerda */
-    align-items: center;  /* Centraliza a imagem verticalmente */
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .inform {
-    flex: 1 1 50%;        /* Permite que o conteúdo ocupe até 50% do espaço disponível */
-    display: flex;        /* Fazendo .inform um contêiner flexível */
-    flex-direction: column;/* Itens organizados verticalmente */
-    gap: -1px;            /* Espaço entre cada item (se o navegador suportar) */
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    gap: -1px;
 }
 
 .inform strong, .inform br {
-    margin-bottom: 1px;  /* Adiciona espaço abaixo de cada item */
+    margin-bottom: 1px;
 }
 
 @media (max-width: 768px) {
     .movie-image {
-        flex: 1 1 100%;  /* Toma toda a largura em dispositivos menores */
-        max-width: 100%; /* Ajusta a largura máxima para a largura total */
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 }
-
-
-
-
-
-
-
-

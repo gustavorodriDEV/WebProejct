@@ -1,36 +1,46 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var modal = document.getElementById("infoModal");
-    var btnOpenModal = document.getElementById("openModalButton");
-    var btnCloseModal = document.getElementsByClassName("close")[0];
-    var bioForm = document.querySelector('form[action="updatebio.php"]'); // Certifique-se de que este seletor corresponde ao seu formulário
+    // Modal de Informações do Perfil
+    var infoModal = document.getElementById("infoModal");
+    var btnOpenInfoModal = document.getElementById("openModalButton");
+    var btnCloseInfoModal = document.getElementsByClassName("close")[0];
 
-    // Abrir o modal ao clicar no 'Alterar'
-    btnOpenModal.onclick = function () {
-        modal.style.display = "block";
+    btnOpenInfoModal.onclick = function () {
+        infoModal.style.display = "block";
     };
 
-    // Fechar o modal ao clicar no 'X'
-    btnCloseModal.onclick = function () {
-        modal.style.display = "none";
+    btnCloseInfoModal.onclick = function () {
+        infoModal.style.display = "none";
     };
 
-    // Fechar o modal ao clicar fora dele
     window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == infoModal) {
+            infoModal.style.display = "none";
         }
     };
 
-    // Manipular submissão do formulário dentro do modal para atualizar biografia
+    // Submissão de formulário para atualizar biografia
+    var bioForm = document.querySelector('form[action="updatebio.php"]');
     document.getElementById("submitInfo").onclick = function (event) {
-        event.preventDefault(); // Impede o recarregamento da página
+        event.preventDefault();
         var bio = document.getElementById("bio").value;
-
-        // Verifica se a biografia tem 30 caracteres ou menos
-        if (bio.length <= 30) {
+        if (bio.length <= 100) {
             bioForm.submit(); // Submete o formulário para "updatebio.php"
         } else {
-            alert("A biografia não deve exceder 30 caracteres.");
+            alert("A biografia não deve exceder 100 caracteres.");
+        }
+    };
+
+    // Modal de Perfil do Usuário
+    var userProfileModal = document.getElementById('userProfileModal');
+    var closeUserProfileModalBtn = document.getElementsByClassName('close')[1]; // Supondo que seja o segundo botão 'close'
+
+    closeUserProfileModalBtn.onclick = function () {
+        userProfileModal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+        if (event.target == userProfileModal) {
+            userProfileModal.style.display = "none";
         }
     };
 });
@@ -56,29 +66,4 @@ function openUserProfileModal(username, bio, profileImage, joinedDate, accountAg
 
 function closeUserProfileModal() {
     document.getElementById('userProfileModal').style.display = 'none';
-}
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    var modal = document.getElementById('userProfileModal');
-    var closeBtn = document.getElementsByClassName('close')[0];
-
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-});
-function openUserProfileModal() {
-    var modal = document.getElementById('userProfileModal');
-    modal.style.display = 'block';
-}
-
-function closeUserProfileModal() {
-    var modal = document.getElementById('userProfileModal');
-    modal.style.display = 'none';
 }

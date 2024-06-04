@@ -4,7 +4,6 @@ require_once 'autenticacao.php';
 autenticacao::checkLogin();
 $nomeUsuario = autenticacao::getUsername();
 
-
 $conn = new mysqli('localhost', 'root', '', 'webPro');
 if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
@@ -21,10 +20,8 @@ $conn->close();
 
 date_default_timezone_set('America/Sao_Paulo');
 
-
 $dataDeCriacao = new DateTime($dataDeCriacao);
 $dataAtual = new DateTime();
-
 
 $dataDeCriacaoFormatada = $dataDeCriacao->format('Y-m-d');
 $dataAtualFormatada = $dataAtual->format('Y-m-d');
@@ -49,8 +46,6 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         $mensagemDiasConta = "há " . floor($totalDias / 365) . " ano(s)";
     }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -61,25 +56,24 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         <link rel="stylesheet" href="estilos.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <style>
-   body {
-    font-family: 'Arial', sans-serif;
-    background-image: linear-gradient(to bottom, #6e45e2, #88d3ce, #ffcc2f);
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column; /* Adiciona esta linha para empilhar verticalmente */
-    align-items: center; /* Centraliza os elementos horizontalmente */
-    justify-content: center; /* Centraliza os elementos verticalmente na página */
-    height: 100vh;
-}
+            body {
+                font-family: 'Arial', sans-serif;
+                background-image: linear-gradient(to bottom, #6e45e2, #88d3ce, #ffcc2f);
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center; /* Centraliza os elementos horizontalmente */
+                justify-content: center; /* Centraliza os elementos verticalmente na página */
+                height: 100vh;
+            }
 
         </style>
     </head>
     <body>
         <div class="avatar">
-            <?php if (isset($fotoPerfil) && file_exists($fotoPerfil)): ?>
+<?php if (isset($fotoPerfil) && file_exists($fotoPerfil)): ?>
                 <img src="<?php echo htmlspecialchars($fotoPerfil); ?>" alt="Foto de perfil" class="profile-image">
-            <?php else: ?>
+<?php else: ?>
                 <i class="fas fa-user-circle avatar-icon" style="font-size: 150px;"></i>
             <?php endif; ?>
             <div class="user-name"><?php echo htmlspecialchars($nomeUsuario); ?></div>
@@ -101,7 +95,7 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
                 <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
                 <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
                     <label for="bio" style="color: white;">Biografia:</label>
-                    <textarea id="bio" name="bio" rows="4" cols="50"></textarea>
+                    <textarea id="bio" name="bio" rows="4" cols="50" maxlength="100"></textarea>
                     <input type="hidden" name="action" value="updateBio">
                     <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
                 </form>
