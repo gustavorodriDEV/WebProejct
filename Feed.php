@@ -27,45 +27,43 @@ autenticacao::checkLogin();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo '<div class="content">';
-                echo '    <div class="movie-details">';
-                echo '<div class="movie-info">';
-                echo '    <div class="user-info">';  // Removido o estilo inline, adicionado via CSS
+                echo '  <div class="movie-details">';
+                echo '    <div class="movie-info">';
+                echo '      <div class="user-info">';
                 if (empty($row['FotoPerfil'])) {
-                    echo '<i class="fas fa-user-circle avatar-icon default-avatar" style="font-size: 55px; color: #777;"></i>';  // Adicionada classe para ícone padrão
+                    echo '        <i class="fas fa-user-circle avatar-icon default-avatar" style="font-size: 40px; color: #777;"></i>';
                 } else {
-                    echo '<img src="' . htmlspecialchars($row['FotoPerfil']) . '" alt="Perfil do usuário" class="profile-image">';
+                    echo '        <img src="' . htmlspecialchars($row['FotoPerfil']) . '" alt="Perfil do usuário" class="profile-image">';
                 }
                 echo '        <span class="user-name">' . htmlspecialchars($row['username']) . '</span>';
-                echo '    </div>';
-
-                echo '</div>';
-                echo '    <div class="movie-image">';  // Contém a imagem do filme
-                echo '        <img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="width: 100%; max-width: 400px;">';
-                echo '    </div>';
-                echo '<div class="inform">';
-                echo '    <div class="info-item"><strong>Título do filme:</strong> <span>' . htmlspecialchars($row['Titulo']) . '</span></div>' . '<br>';
-                echo '    <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div>' . '<br>';
-                echo '    <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div>' . '<br>';
-                echo '    <div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div>' . '<br>';
-                echo '</div>';
-
-                echo '</div>';
-                echo '        <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
-                echo '        <form action="comments_page.php" method="POST">';
-                echo '            <input type="hidden" name="PostID" value="' . htmlspecialchars($row['PostID']) . '">';
-                echo '            <input type="hidden" name="Titulo" value="' . htmlspecialchars($row['Titulo']) . '">';
-                echo '            <input type="hidden" name="Diretor" value="' . htmlspecialchars($row['Diretor']) . '">';
-                echo '            <input type="hidden" name="Categoria" value="' . htmlspecialchars($row['Categoria']) . '">';
-                echo '            <input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($row['DataDeLancamento']) . '">';
-                echo '            <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
-                echo '            <button type="submit" class="comment-button">Ver Comentários</button>';
-                echo '        </form>';
-                echo '    </div>';
-                echo '</div>';
+                echo '      </div>'; // Close user-info
+                echo '    </div>'; // Close movie-info
+                echo '    <div class="movie-image">';
+                echo '      <img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="width: 100%; max-width: 400px;">';
+                echo '    </div>'; // Close movie-image
+                echo '    <div class="inform">';
+                echo '      <div class="info-item"><strong>Título do filme:</strong> <span>' . htmlspecialchars($row['Titulo']) . '</span></div><br>';
+                echo '      <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div><br>';
+                echo '      <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div><br>';
+                echo '      <div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div><br>';
+                echo '    </div>'; // Close inform
+                echo '  </div>'; // Close movie-details
+                echo '  <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
+                echo '  <form action="comments_page.php" method="POST">';
+                echo '    <input type="hidden" name="PostID" value="' . htmlspecialchars($row['PostID']) . '">';
+                echo '    <input type="hidden" name="Titulo" value="' . htmlspecialchars($row['Titulo']) . '">';
+                echo '    <input type="hidden" name="Diretor" value="' . htmlspecialchars($row['Diretor']) . '">';
+                echo '    <input type="hidden" name="Categoria" value="' . htmlspecialchars($row['Categoria']) . '">';
+                echo '    <input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($row['DataDeLancamento']) . '">';
+                echo '    <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
+                echo '    <button type="submit" class="comment-button">Ver Comentários</button>';
+                echo '  </form>';
+                echo '</div>'; // Close content
             }
         } else {
             echo "<p>Nenhuma mídia cadastrada.</p>";
         }
+
         $conn->close();
         ?>
     </body>
