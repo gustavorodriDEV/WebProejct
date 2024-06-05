@@ -1,49 +1,30 @@
 <?php
 session_start();
 require_once 'autenticacao.php';
+autenticacao::checkLogin();
+$nomeUsuario = $_POST['username'];
+include 'navBar.php';
+echo $GLOBALS['navbar'];
 
-$nomeUsuario = autenticacao::getUsername();
-// Tenta obter o nome de usuário da URL, caso contrário, usa o nome de usuário da sessão
-$nomeUsuario = isset($_GET['username']) ? $_GET['username'] : autenticacao::getUsername();
-
-// Conecta ao banco de dados e busca informações do usuário
-function buscarInformacoesUsuario($nomeUsuario) {
-    $conn = new mysqli('localhost', 'root', '', 'webPro');
-    if ($conn->connect_error) {
-        die("Falha na conexão: " . $conn->connect_error);
-    }
-
-    $stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
-    $stmt->bind_param("s", $nomeUsuario);
-    $stmt->execute();
-    $stmt->bind_result($nomeUsuarioRetornado, $biografia, $dataDeCriacao, $fotoPerfil);
-    if (!$stmt->fetch()) {
-        $stmt->close();
-        $conn->close();
-        return null; // Retorna nulo se não encontrar o usuário
-    }
-    $stmt->close();
-    $conn->close();
-
-    return [
-        'nomeUsuario' => $nomeUsuarioRetornado, // Corrigido de 'nomeUsuarioRetornado' para 'nomeUsuario'
-        'biografia' => $biografia,
-        'dataDeCriacao' => $dataDeCriacao,
-        'fotoPerfil' => $fotoPerfil
-    ];
+$conn = new mysqli('localhost', 'root', '', 'webPro');
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
 }
 
-$perfilUsuario = buscarInformacoesUsuario($nomeUsuario);
-if (!$perfilUsuario) {
-    die("Usuário não encontrado.");
-}
+// Após recuperar os dados do banco de dados
+$stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
+$stmt->bind_param("s", $nomeUsuario);
+$stmt->execute();
+$stmt->bind_result($nomeUsuarioRetornado, $biografia, $dataDeCriacao, $fotoPerfil);
+$stmt->fetch();
+$stmt->close();
+$conn->close();
 
-// Define o timezone
 date_default_timezone_set('America/Sao_Paulo');
-$dataDeCriacao = new DateTime($perfilUsuario['dataDeCriacao']);
+
+$dataDeCriacao = new DateTime($dataDeCriacao);
 $dataAtual = new DateTime();
 
-// Formata ambas as datas para 'Y-m-d' para comparação
 $dataDeCriacaoFormatada = $dataDeCriacao->format('Y-m-d');
 $dataAtualFormatada = $dataAtual->format('Y-m-d');
 
@@ -68,8 +49,6 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
     }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt">
     <head>
@@ -77,89 +56,61 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Perfil do Usuário</title>
         <link rel="stylesheet" href="estilos.css">
+        <link rel="stylesheet" href="Perfil_StyleSheet.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: transparent; /* Fundo transparente */
-                margin: 0;
-                padding: 0;
-                display: flex;
-                flex-direction: column; /* Adiciona esta linha para empilhar verticalmente */
-                align-items: center; /* Centraliza os elementos horizontalmente */
-                justify-content: center; /* Centraliza os elementos verticalmente na página */
-                height: 100vh;
-            }
-            .modal {
-                display: none; /* Escondido por padrão */
-                position: fixed; /* Fixo na tela */
-                z-index: 1; /* Sobre outros elementos */
-                left: 0;
-                top: 0;
-                width: 100%; /* Largura total da tela */
-                height: 100%; /* Altura total da tela */
 
-            }
-
-            .modal-content {
-                position: relative;
-                margin: 10% auto; /* Centralizado na tela */
-                padding: 20px;
-                border: 1px solid #888;
-                width: 50%; /* Metade da largura da tela */
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                border-radius: 10px;
-                background-image: linear-gradient(to bottom, #6e45e2, #88d3ce, #ffcc2f);
-
-            }
-
-            .close {
-                color: #aaa;
-                position: absolute;
-                top: 10px;
-                right: 25px;
-                font-size: 30px;
-                font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
 
         </style>
     </head>
     <body>
-        <!-- Janela Modal para o Perfil do Usuário -->
+        <div class="avatar">
+            <?php if (isset($fotoPerfil) && file_exists($fotoPerfil)): ?>
+                <img src="<?php echo htmlspecialchars($fotoPerfil); ?>" alt="Foto de perfil" class="profile-image">
+            <?php else: ?>
+                <i class="fas fa-user-circle avatar-icon" style="font-size: 150px;"></i>
+            <?php endif; ?>
+            <div class="user-name"><?php echo htmlspecialchars($nomeUsuario); ?></div>
+        </div>
 
-        <div id="userProfileModal" class="modal" style="display: none;">
-            <span class="close" onclick="closeUserProfileModal()">&times;</span>
-            <div class="avatar">
-                <?php if (isset($perfilUsuario['fotoPerfil']) && file_exists($perfilUsuario['fotoPerfil'])): ?>
-                    <img src="<?php echo htmlspecialchars($perfilUsuario['fotoPerfil']); ?>" alt="Foto de perfil" class="profile-image">
-                <?php else: ?>
-                    <i class="fas fa-user-circle avatar-icon" style="font-size: 150px;"></i>
-                <?php endif; ?>
-                <div class="user-name"><?php echo htmlspecialchars($perfilUsuario['nomeUsuario']); ?></div>
+        <div class="info-container">
+            <div class="name-description">
+                <p id="userNameDisplay" class="placeholder-text"><?php echo htmlspecialchars($nomeUsuarioRetornado); ?></p>
+                <p id="userBioDisplay" class="placeholder-text"><?php echo htmlspecialchars($biografia); ?></p>
+
             </div>
 
-
-            <div class="info-container" style="padding: 20px; text-align: center;">
-                <p class="user-bio"><?php echo htmlspecialchars($perfilUsuario['biografia']); ?></p>
+            <div id="infoModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
+                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                        <label for="bio" style="color: white;">Biografia:</label>
+                        <textarea id="bio" name="bio" rows="4" cols="50" maxlength="200"></textarea>
+                        <input type="hidden" name="action" value="updateBio">
+                        <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
+                    </form>
+                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                        <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
+                        <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
+                        <input type="hidden" name="action" value="uploadFoto">
+                    </form>
+                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="removeFoto">
+                        <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
+                    </form>
+                </div>
             </div>
+
+            <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
+
 
             <div class="date-container" style="text-align: center; margin-top: 20px;">
                 <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
                 <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
             </div>
-        </div>
 
+            <script src="scripts.js"></script>
+            <script src="perfil_Script.js"></script>
 
-        <button onclick="openUserProfileModal();">Mostrar Perfil</button>
-
-
-        <script src="scripts.js"></script>
     </body>
 </html>

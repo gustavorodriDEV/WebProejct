@@ -3,7 +3,6 @@ require_once 'autenticacao.php';
 require_once 'visitarUsuario.php';  // Inclui a classe VisitarUsuario
 
 autenticacao::checkLogin();
-
 ?>
 
 
@@ -13,6 +12,8 @@ autenticacao::checkLogin();
         <meta charset="UTF-8">
         <title>Detalhes do Filme</title>
         <link rel="stylesheet" href="modal.css">
+                <link rel="stylesheet" href="FeedStyleSheet.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
         <style>
             body {
@@ -138,7 +139,6 @@ autenticacao::checkLogin();
     <body>
         <div class="content">
             <?php
-            
 // Verificar se os dados foram enviados pelo método POST
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $conn = new mysqli('localhost', 'root', '', 'webPro');
@@ -154,7 +154,13 @@ autenticacao::checkLogin();
                 $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
                 //$username = $_SESSION['username']; // Descomente e ajuste conforme seu sistema de login
                 // Query para buscar detalhes da postagem incluindo o caminho da imagem
-                $sql = "SELECT Titulo, Diretor, Categoria, DataDeLancamento, Descricao, Caminho_Imagem FROM posts WHERE PostID = $postID";
+                $sql = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil
+                        FROM posts p
+                        LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
+                        WHERE PostID = $postID
+                        ORDER BY p.DataDeLancamento DESC";
+
+                      
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -168,7 +174,14 @@ autenticacao::checkLogin();
                     // Adicionando a imagem
                     echo '<img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="max-width: 100%; height: auto;">';
                     echo '</div>';
-
+                    echo '    <div class="user-info">';  // Removido o estilo inline, adicionado via CSS
+                if (empty($row['FotoPerfil'])) {
+                    echo '<i class="fas fa-user-circle avatar-icon default-avatar" style="font-size: 55px; color: #777;"></i>';  // Adicionada classe para ícone padrão
+                } else {
+                    echo '<img src="' . htmlspecialchars($row['FotoPerfil']) . '" alt="Perfil do usuário" class="profile-image">';
+                }
+                echo '        <span class="user-name">' . htmlspecialchars($row['username']) . '</span>';
+                echo '    </div>';
                     // Lógica de comentários
                     $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
                     $resultComentarios = $conn->query($sqlComentarios);
@@ -185,8 +198,16 @@ autenticacao::checkLogin();
                             $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
 
                             $commentsHTML .= "<div class='comment'>";
-                            $commentsHTML .= "<strong><a href='#' onclick=\"openUserProfileModal('" . htmlspecialchars($username) . "'); return false;\">" . htmlspecialchars($username) . "</a></strong> <span>" . $dataFormatada . "</span><br>";
-
+                            $commentsHTML .= "
+                            <form action='PerfilComment.php' method='post'>
+                                <strong>
+                                    <button type='submit' style='border: none; background: none; padding: 0; font: inherit; cursor: pointer; color: blue; text-decoration: underline;'>
+                                        " . htmlspecialchars($username) . "
+                                    </button>
+                                </strong>
+                                <input type='hidden' name='username' value='" . htmlspecialchars($username) . "'>
+                                <span>" . $dataFormatada . "</span>
+                            </form><br>";
 
                             $commentsHTML .= '<div class="comment-text">' . $conteudo . '</div>';
                             $commentsHTML .= '</div>';
@@ -202,7 +223,7 @@ autenticacao::checkLogin();
                 $conn->close();
             }
             ?>
-           
+
         </div> 
 
 
@@ -222,24 +243,24 @@ autenticacao::checkLogin();
                 <input type="submit" value="Enviar">
             </form>
         </div>
-        
-  <div id="userProfileModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeUserProfileModal()">&times;</span>
-        <?php if ($perfilUsuario): ?>
-            <div class="avatar">
-                <!-- Adicionar lógica para mostrar imagem, se disponível -->
+
+        <div id="userProfileModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeUserProfileModal()">&times;</span>
+                <?php if ($perfilUsuario): ?>
+                    <div class="avatar">
+                        <!-- Adicionar lógica para mostrar imagem, se disponível -->
+                    </div>
+                    <div id="modalUsername"><?php echo htmlspecialchars($perfilUsuario['nomeUsuario']); ?></div>
+                    <p id="modalBio"><?php echo htmlspecialchars($perfilUsuario['biografia']); ?></p>
+                    <p>Entrou em: <span id="modalJoinedDate"><?php echo (new DateTime($perfilUsuario['dataDeCriacao']))->format('d/m/Y'); ?></span></p>
+                    <p>Conta criada há: <span id="modalAccountAge"><?php echo $mensagemDiasConta; ?></span></p>
+                <?php else: ?>
+                    <p>Usuário não encontrado.</p>
+                <?php endif; ?>
+                <script src="modal.js"></script>
             </div>
-            <div id="modalUsername"><?php echo htmlspecialchars($perfilUsuario['nomeUsuario']); ?></div>
-            <p id="modalBio"><?php echo htmlspecialchars($perfilUsuario['biografia']); ?></p>
-            <p>Entrou em: <span id="modalJoinedDate"><?php echo (new DateTime($perfilUsuario['dataDeCriacao']))->format('d/m/Y'); ?></span></p>
-            <p>Conta criada há: <span id="modalAccountAge"><?php echo $mensagemDiasConta; ?></span></p>
-        <?php else: ?>
-            <p>Usuário não encontrado.</p>
-        <?php endif; ?>
-            <script src="modal.js"></script>
-    </div>
- 
+
     </body>
 
 </html>

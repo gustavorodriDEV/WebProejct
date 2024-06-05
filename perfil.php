@@ -3,6 +3,8 @@ session_start();
 require_once 'autenticacao.php';
 autenticacao::checkLogin();
 $nomeUsuario = autenticacao::getUsername();
+include 'navBar.php';
+echo $GLOBALS['navbar'];
 
 $conn = new mysqli('localhost', 'root', '', 'webPro');
 if ($conn->connect_error) {
@@ -54,26 +56,18 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Perfil do Usuário</title>
         <link rel="stylesheet" href="estilos.css">
+        <link rel="stylesheet" href="Perfil_StyleSheet.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-image: linear-gradient(to bottom, #6e45e2, #88d3ce, #ffcc2f);
-                margin: 0;
-                padding: 0;
-                display: flex;
-                align-items: center; /* Centraliza os elementos horizontalmente */
-                justify-content: center; /* Centraliza os elementos verticalmente na página */
-                height: 100vh;
-            }
+
 
         </style>
     </head>
     <body>
         <div class="avatar">
-<?php if (isset($fotoPerfil) && file_exists($fotoPerfil)): ?>
+            <?php if (isset($fotoPerfil) && file_exists($fotoPerfil)): ?>
                 <img src="<?php echo htmlspecialchars($fotoPerfil); ?>" alt="Foto de perfil" class="profile-image">
-<?php else: ?>
+            <?php else: ?>
                 <i class="fas fa-user-circle avatar-icon" style="font-size: 150px;"></i>
             <?php endif; ?>
             <div class="user-name"><?php echo htmlspecialchars($nomeUsuario); ?></div>
@@ -83,42 +77,40 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
             <div class="name-description">
                 <p id="userNameDisplay" class="placeholder-text"><?php echo htmlspecialchars($nomeUsuarioRetornado); ?></p>
                 <p id="userBioDisplay" class="placeholder-text"><?php echo htmlspecialchars($biografia); ?></p>
-                <form method="POST" action="">
-                    <button type="button" id="openModalButton">Alterar</button>
-                </form>
+
             </div>
-        </div>
 
-
-        <div id="infoModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
-                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                    <label for="bio" style="color: white;">Biografia:</label>
-                    <textarea id="bio" name="bio" rows="4" cols="50" maxlength="100"></textarea>
-                    <input type="hidden" name="action" value="updateBio">
-                    <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
-                </form>
-                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                    <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
-                    <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
-                    <input type="hidden" name="action" value="uploadFoto">
-                </form>
-                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="removeFoto">
-                    <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
-                </form>
+            <div id="infoModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
+                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                        <label for="bio" style="color: white;">Biografia:</label>
+                        <textarea id="bio" name="bio" rows="4" cols="50" maxlength="200"></textarea>
+                        <input type="hidden" name="action" value="updateBio">
+                        <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
+                    </form>
+                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                        <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
+                        <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
+                        <input type="hidden" name="action" value="uploadFoto">
+                    </form>
+                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="removeFoto">
+                        <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
+                    </form>
+                </div>
             </div>
-        </div>
+
+            <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
 
 
+            <div class="date-container" style="text-align: center; margin-top: 20px;">
+                <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
+                <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
+            </div>
 
-        <!-- Exibição da data de criação e dos dias de conta -->
-        <div class="date-container" style="text-align: center; margin-top: 20px;">
-            <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
-            <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
-        </div>
+            <script src="scripts.js"></script>
+            <script src="perfil_Script.js"></script>
 
-        <script src="scripts.js"></script>
     </body>
 </html>

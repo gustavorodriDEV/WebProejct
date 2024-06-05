@@ -12,6 +12,7 @@ $navbar = '
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     $navbar .= '
     <a href="novaPostagem.php" class="nav-item"><i class="fas fa-pencil-alt"></i> Postagem</a>
+    <a href="#" class="nav-item" onclick="document.getElementById(\'infoModal\').style.display=\'block\'"><i class="fas fa-edit"></i> Editar Perfil</a>
     <a href="Sair.php" class="nav-item"><i class="fas fa-sign-out-alt"></i> Sair</a>';
 }
 

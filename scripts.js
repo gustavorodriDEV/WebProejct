@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Função para formatar a biografia
+    function formatBio(bio) {
+    let formattedBio = '';
+    let length = 30;
+
+    while (bio.length > 0) {
+        if (bio.length > length) {
+            let chunk = bio.substring(0, length);
+            let spaceIndex = chunk.lastIndexOf(' ');
+            let cutIndex = spaceIndex > -1 ? spaceIndex : length;
+            formattedBio += chunk.substring(0, cutIndex).trim() + '\n';
+            bio = bio.substring(cutIndex).trim();
+        } else {
+            formattedBio += bio.trim();
+            break;
+        }
+    }
+    return formattedBio;
+}
+
     // Modal de Informações do Perfil
     var infoModal = document.getElementById("infoModal");
     var btnOpenInfoModal = document.getElementById("openModalButton");
@@ -18,15 +38,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Aplicar a formatação na biografia ao carregar a página
+    let bioText = document.getElementById('userBioDisplay').textContent;
+    document.getElementById('userBioDisplay').textContent = formatBio(bioText);
+
     // Submissão de formulário para atualizar biografia
-    var bioForm = document.querySelector('form[action="updatebio.php"]');
-    document.getElementById("submitInfo").onclick = function (event) {
+    var bioForm = document.querySelector('form[action="updatePerfil.php"]');
+    bioForm.onsubmit = function (event) {
         event.preventDefault();
         var bio = document.getElementById("bio").value;
-        if (bio.length <= 100) {
-            bioForm.submit(); // Submete o formulário para "updatebio.php"
+        if (bio.length > 200) {
+            // Se a biografia excede 200 caracteres, mostra a mensagem de erro
+            document.getElementById("bioErrorMessage").textContent = "Desculpe, a sua biografia não pode exceder 200 caracteres. Por favor, reduza o tamanho e tente novamente.";
+            document.getElementById("bioErrorMessage").style.display = 'block';
         } else {
-            alert("A biografia não deve exceder 100 caracteres.");
+            // Se estiver tudo certo, oculta a mensagem de erro e submete o formulário
+            document.getElementById("bioErrorMessage").style.display = 'none';
+            bioForm.submit();
         }
     };
 
@@ -44,26 +72,3 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 });
-
-function openUserProfileModal(username, bio, profileImage, joinedDate, accountAge) {
-    document.getElementById('modalUsername').textContent = username;
-    document.getElementById('modalBio').textContent = bio;
-
-    if (profileImage && profileImage !== 'null' && profileImage !== '') {
-        document.getElementById('profileImage').src = profileImage;
-        document.getElementById('profileImage').style.display = 'block';
-        document.getElementById('defaultAvatar').style.display = 'none';
-    } else {
-        document.getElementById('profileImage').style.display = 'none';
-        document.getElementById('defaultAvatar').style.display = 'block';
-    }
-
-    document.getElementById('modalJoinedDate').textContent = joinedDate;
-    document.getElementById('modalAccountAge').textContent = accountAge;
-
-    document.getElementById('userProfileModal').style.display = 'block';
-}
-
-function closeUserProfileModal() {
-    document.getElementById('userProfileModal').style.display = 'none';
-}

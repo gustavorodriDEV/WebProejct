@@ -55,7 +55,7 @@ function removeFoto($conn) {
         unlink($fotoPerfil); // Remove a foto do diretório
     }
 
-    // Atualizar o banco de dados para remover o caminho da foto de perfil
+  
     $stmt = $conn->prepare("UPDATE perfilusuario SET fotoPerfil = NULL WHERE nomeUsuario = ?");
     $stmt->bind_param("s", $nomeUsuario);
     $stmt->execute();
@@ -70,7 +70,7 @@ function removeFoto($conn) {
 
 function updateBio($conn) {
     $nomeUsuario = $_SESSION['username'];
-    $biografia = empty($_POST['bio']) ? "A" : $_POST['bio'];
+    $biografia = empty($_POST['bio']) ? " " : $_POST['bio'];
     $stmt = $conn->prepare("SELECT biografia FROM perfilusuario WHERE nomeUsuario = ?");
     $stmt->bind_param("s", $nomeUsuario);
     $stmt->execute();
@@ -78,11 +78,7 @@ function updateBio($conn) {
     $stmt->fetch();
     $stmt->close();
 
-    if ($biografia === $biografiaAtual) {
-        echo "A nova biografia é igual à biografia atual. Nenhuma atualização foi feita.";
-        $conn->close();
-        exit();
-    }
+   
 
     $stmt = $conn->prepare("UPDATE perfilusuario SET biografia = ? WHERE nomeUsuario = ?");
     $stmt->bind_param("ss", $biografia, $nomeUsuario);
