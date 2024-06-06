@@ -1,5 +1,7 @@
 <?php
+session_start(); // Inicia a sessão no início do script
 require_once 'autenticacao.php';
+
 // Conectar ao banco de dados
 $conn = new mysqli('localhost', 'root', '', 'webPro');
 if ($conn->connect_error) {
@@ -10,6 +12,8 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['PostID'], $_POST['username'])) {
     // Capturar e sanitizar os dados enviados via POST
     $postID = intval($_POST['PostID']);
+    $_SESSION['last_post_id'] = $postID; // Salva o PostID na sessão
+
     $username = autenticacao::getUsername();
     $conteudo = $conn->real_escape_string(htmlspecialchars($_POST['conteudo']));
     date_default_timezone_set('America/Sao_Paulo');
@@ -26,8 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['Po
         $stmt->execute();
         $stmt->close();
 
-        // Redirecionar para feed.php após a inserção do comentário
-        header('Location: Feed.php');
+        // Preparar para redirecionar enviando POSTID via POST
+        echo "<form id='redirectForm' action='comments_page.php' method='POST' style='display:none;'>
+                <input type='hidden' name='PostID' value='$postID'>
+              </form>
+              <script type='text/javascript'>
+                document.getElementById('redirectForm').submit();
+              </script>";
         exit;
     } else {
         echo "Erro ao preparar a inserção: " . $conn->error;

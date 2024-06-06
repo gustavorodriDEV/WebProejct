@@ -144,14 +144,33 @@ autenticacao::checkLogin();
                 $conn = new mysqli('localhost', 'root', '', 'webPro');
                 if ($conn->connect_error) {
                     die("Conexão falhou: " . $conn->connect_error);
-                }
+            }}
 
-                $postID = intval($_POST['PostID']);
-                $titulo = htmlspecialchars($_POST['Titulo']);
-                $diretor = htmlspecialchars($_POST['Diretor']);
-                $categoria = htmlspecialchars($_POST['Categoria']);
-                $dataDeLancamento = htmlspecialchars($_POST['DataDeLancamento']);
-                $descricao = nl2br(htmlspecialchars($_POST['Descricao']));
+    $postID = intval($_POST['PostID']);
+
+    // Consulta SQL para obter os detalhes do post juntamente com a foto de perfil do usuário
+    $sqlPost = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil
+            FROM posts p
+            LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
+            WHERE p.PostID = ?
+            ORDER BY p.DataDeLancamento DESC";
+
+    $stmt = $conn->prepare($sqlPost);
+    if ($stmt) {
+        $stmt->bind_param("i", $postID); // Vincula o PostID à consulta
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            // Aqui você pode usar os dados obtidos, por exemplo:
+            $titulo = htmlspecialchars($row['Titulo']);
+            $diretor = htmlspecialchars($row['Diretor']);
+            $categoria = htmlspecialchars($row['Categoria']);
+            $dataDeLancamento = htmlspecialchars($row['DataDeLancamento']);
+            $descricao = nl2br(htmlspecialchars($row['Descricao']));
+            $caminhoImagem = htmlspecialchars($row['Caminho_Imagem']);
+            $fotoPerfil = htmlspecialchars($row['FotoPerfil']);
                 //$username = $_SESSION['username']; // Descomente e ajuste conforme seu sistema de login
                 // Query para buscar detalhes da postagem incluindo o caminho da imagem
                 $sql = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil
@@ -160,7 +179,7 @@ autenticacao::checkLogin();
                         WHERE PostID = $postID
                         ORDER BY p.DataDeLancamento DESC";
 
-                      
+        }
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
