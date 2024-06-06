@@ -1,0 +1,207 @@
+:root {
+    --background-color: #ece5dd;
+    --text-color: #333;
+    --font-family: 'Arial', sans-serif;
+    --button-bg-color: #f7f7f7;
+    --button-bg-hover: #e1e1e1;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --font-size-normal: 1rem;
+    --font-size-large: 1.25rem;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 95%; /* Mantido de antes */
+    max-width: 1200px; /* Mantido de antes */
+    margin: 2rem auto;
+    background-color: #ecec5747;
+    padding: 2rem; /* Aumentado para mais espaço interno */
+    box-shadow: var(--box-shadow);
+    border-radius: 35px;
+    justify-content: space-between; /* Ajuda no alinhamento vertical */
+    align-items: center; /* Novo: Alinha todos os filhos ao centro verticalmente */
+}
+
+
+
+@media (min-width: 768px) {
+    .content {
+        flex-direction: row;
+        gap: 2rem;
+    }
+}
+
+.user-info {
+    margin-top: -185px;
+    margin-left: -16px;
+}
+
+.default-avatar {
+    font-size: 50px; /* Reduzido de 55px para 50px */
+    color: #777;
+}
+
+.profile-image {
+    width: 40px;  /* Largura definida como 50px */
+    height: 40px; /* Altura definida como 50px */
+    border-radius: 50%; /* Assegura que as bordas sejam totalmente arredondadas */
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem ser distorcida */
+}
+
+.movie-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.back-button:hover, .comment-button:hover {
+    background-color: var(--button-bg-hover);
+}
+
+
+
+
+.movie-description {
+    font-size: var(--font-size-normal);
+    margin-top: 210px; /* Assegura espaÃ§o acima da descriÃ§Ã£o */
+    width: 50%; /* Ocupa a largura total dentro de .content */
+}
+
+
+
+.movie-img img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover; /* Adicione esta linha se quiser cortar a imagem preservando a proporção */
+}
+
+
+.inform {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    gap: -1px;
+}
+
+.inform strong, .inform br {
+    margin-bottom: 1px;
+}
+
+@media (max-width: 768px) {
+    .movie-image {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+
+/*comentarios*/
+
+.comment {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.comment form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.comment button {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    color: #007BFF;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.comment span {
+    font-size: 0.85rem;
+    color: #666;
+    margin-left: 15px;
+}
+
+.comment-text {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #333;
+}
+
+.add-comment {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 10px;
+    background: #fff;
+    box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-comment h3 {
+    color: #333;
+    font-size: 18px;
+    margin-right: 20px;
+}
+
+.add-comment form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+.add-comment textarea {
+    padding: 12px 15px;          /* Espaço interno para um bom espaçamento do texto */
+    border: 2px solid #d1d1d1;   /* Cor de borda sutil */
+    border-radius: 15px;         /* Bordas bem arredondadas */
+    height: 60px;                /* Altura menor */
+    width: 500px;                /* Largura reduzida */
+    resize: none;                /* Desabilita o redimensionamento pelo usuário */
+    outline: none;               /* Remove o contorno ao focar */
+    font-family: 'Arial', sans-serif; /* Fonte consistente com o resto do
+    font-size: 16px; /* Tamanho de fonte maior para melhor leitura */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra leve para profundidade */
+}
+
+.add-comment textarea:focus {
+    border-color: #007bff; /* Cor de foco mais vibrante */
+    box-shadow: 0 0 8px rgba(0,123,255,0.2); /* Sombra externa para destacar */
+}
+
+
+.add-comment input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4267B2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.25s ease-in-out;
+}
+
+.add-comment input[type="submit"]:hover {
+    background-color: #365899;
+}
