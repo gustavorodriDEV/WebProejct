@@ -189,37 +189,6 @@ a, button[type="button"] {
 
 /* navbar  */
 
-.navbar {
-    width: 100%;
-    background: linear-gradient(to right, #6e45e2, #88d3ce);
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-evenly;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: fixed; /* Fixa a navbar no topo da página */
-    top: 0;
-    z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
-    font-size: 25px;
-}
-
-.nav-item i {
-    margin-right: 8px;
-}
-
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    transition: background-color 0.3s;
-}
-
-.nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
 
 /* Estilo do Modal para a tela de perfil */
 

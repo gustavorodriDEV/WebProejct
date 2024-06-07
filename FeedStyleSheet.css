@@ -104,7 +104,6 @@ body {
 }
 
 
-
 .movie-image {
     flex: 0 1 250px;    /* Flex-basis reduzido de 300px para 250px */
     max-width: 250px;   /* Max-width reduzido de 300px para 250px */

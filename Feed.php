@@ -1,16 +1,16 @@
 <?php
 require_once 'autenticacao.php';
 autenticacao::checkLogin();
+$username = autenticacao::getUsername();
 ?>
-     
-
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
         <title>Detalhes do Filme</title>
         <link rel="stylesheet" href="FeedStyleSheet.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
     </head>
     <body>

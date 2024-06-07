@@ -32,6 +32,61 @@ $GLOBALS['navbar'] = $navbar;
         <link rel="stylesheet" href="estilos.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
+        <style>
+            /* styles.css */
+            .navbar {
+                width: 100%;
+                background: linear-gradient(to right, #6e45e2, #88d3ce);
+                padding: 10px 0;
+                display: flex;
+                justify-content: space-evenly;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                position: fixed;
+                top: 0;
+                z-index: 1000;
+                font-size: 25px;
+            }
+
+            .nav-item i {
+                margin-right: 8px;
+            }
+
+            .nav-item {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+                padding: 8px 16px;
+                border-radius: 20px;
+                transition: background-color 0.3s;
+            }
+
+            .nav-item:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+
+            @media (max-width: 700px) {
+                .navbar {
+                    font-size: 18px;
+                }
+
+                .nav-item {
+                    font-size: 10px;
+                    padding: 10px 20px;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .navbar {
+                    font-size: 16px;
+                }
+
+                .nav-item {
+                    font-size: 12px;
+                }
+            }
+        </style>
     </head>
     <body>
     </body>
