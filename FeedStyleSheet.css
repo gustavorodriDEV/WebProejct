@@ -20,20 +20,23 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
-    width: 95%;
-    max-width: 1200px;
+    width: 95%; /* Mantido de antes */
+    max-width: 1200px; /* Mantido de antes */
     margin: 2rem auto;
-    background-color: #fff; /* Para melhor legibilidade */
-    padding: 2rem;
+    background-color: #ecec5747;
+    padding: 2rem; /* Aumentado para mais espaço interno */
     box-shadow: var(--box-shadow);
     border-radius: 35px;
-    align-items: center;
+    justify-content: space-between; /* Ajuda no alinhamento vertical */
+    align-items: center; /* Novo: Alinha todos os filhos ao centro verticalmente */
 }
+
+
 
 @media (min-width: 768px) {
     .content {
         flex-direction: row;
-        align-items: start; /* Alinha os itens ao topo */
+        gap: 2rem;
     }
 }
 
@@ -44,45 +47,20 @@ body {
 }
 
 .default-avatar {
-    font-size: 50px;
+    font-size: 50px; /* Reduzido de 55px para 50px */
     color: #777;
 }
 
 .profile-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 40px;  /* Largura definida como 50px */
+    height: 40px; /* Altura definida como 50px */
+    border-radius: 50%; /* Assegura que as bordas sejam totalmente arredondadas */
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem ser distorcida */
 }
 
-.movie-details {
-    display: flex;
-    flex-direction: column; /* Para melhor organização dos detalhes do filme */
-    align-items: start; /* Alinhamento à esquerda */
-    gap: 10px; /* Espaçamento entre elementos */
-    width: 100%;
-    max-width: 1024px;
-    margin: 1rem auto; /* Ajuste de margem para evitar o uso de valores negativos */
-}
-
-.movie-description {
-    font-size: var(--font-size-normal);
-    margin-top: 1rem; /* Ajustado para um valor mais apropriado */
-    width: 100%; /* Ajuste para ocupar toda a largura disponível */
-}
-
-.movie-image {
-    flex: 0 0 auto; /* Não crescer nem encolher */
-    width: 100%; /* Ajuste para responsividade */
-    max-width: 300px; /* Tamanho máximo da imagem */
-    border-radius: 20px;
-    overflow: hidden; /* Esconde qualquer parte da imagem que exceda o border-radius */
-}
-
-@media (max-width: 768px) {
-    .movie-image {
-        max-width: 100%; /* A imagem se ajusta ao container em telas menores */
-    }
+.movie-info {
+    margin-top: -230px;
+    margin-left: -30px;
 }
 
 .back-button, .comment-button {
@@ -98,4 +76,59 @@ body {
 
 .back-button:hover, .comment-button:hover {
     background-color: var(--button-bg-hover);
+}
+
+.comment-button {
+    border-radius: 0.3125rem;
+}
+
+
+
+.movie-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1024px;
+    margin: auto;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+
+
+.movie-description {
+    font-size: var(--font-size-normal);
+    margin-top: 30px;
+    margin-left: 154px; 
+}
+
+
+
+.movie-image {
+    flex: 0 1 250px;    /* Flex-basis reduzido de 300px para 250px */
+    max-width: 250px;   /* Max-width reduzido de 300px para 250px */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 20px; /* Mantém as bordas arredondadas em 20px */
+}
+
+
+.inform {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    gap: -1px;
+}
+
+.inform strong, .inform br {
+    margin-bottom: 1px;
+}
+
+@media (max-width: 768px) {
+    .movie-image {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
 }

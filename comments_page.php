@@ -44,8 +44,6 @@ if ($stmt) {
 } else {
     echo "Erro na preparação da consulta: " . $conn->error;
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -59,69 +57,69 @@ if ($stmt) {
     </head>
     <body>
         <div class="content">
-            <?php if (isset($row)): ?>
+<?php if (isset($row)): ?>
                 <div class="movie-details">
+                    <div class="movie-img"><img src="<?= $caminhoImagem ?>" alt="Imagem do filme"></div>
                     <strong>Título do filme:</strong> <?= $titulo ?><br>
                     <strong>Diretor:</strong> <?= $diretor ?><br>
                     <strong>Categoria:</strong> <?= $categoria ?><br>
                     <strong>Data de Lançamento:</strong> <?= $dataDeLancamento ?><br>
                     <div class="movie-description"><?= $descricao ?></div>
-                    <div class="movie-img"><img src="<?= $caminhoImagem ?>" alt="Imagem do filme"></div>
                 </div>
                 <div class="user-info">
-                    <?php if (empty($fotoPerfil)): ?>
+    <?php if (empty($fotoPerfil)): ?>
                         <i class="fas fa-user-circle avatar-icon default-avatar" style="font-size: 55px; color: #777;"></i>
                     <?php else: ?>
                         <img src="<?= $fotoPerfil ?>" alt="Perfil do usuário" class="profile-image">
                     <?php endif; ?>
                     <span class="user-name"><?= htmlspecialchars($row['username']) ?></span>
                 </div>
-            <?php endif; ?>
+<?php endif; ?>
         </div>
         <div>
-            <?php
-            // Consulta para buscar comentários
-            $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
-            $resultComentarios = $conn->query($sqlComentarios);
+<?php
+// Consulta para buscar comentários
+$sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
+$resultComentarios = $conn->query($sqlComentarios);
 
-            if ($resultComentarios && $resultComentarios->num_rows > 0) {
-                echo '<div class="comments-section">';
-                echo '<h3>Comentários</h3>';
+if ($resultComentarios && $resultComentarios->num_rows > 0) {
+    echo '<div class="comments-section">';
+    echo '<h3>Comentários</h3>';
 
-                while ($row = $resultComentarios->fetch_assoc()) {
-                    $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
-                    $username = htmlspecialchars($row['Username']);
-                    $data = htmlspecialchars($row['DataDeComentario']);
-                    $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
+    while ($row = $resultComentarios->fetch_assoc()) {
+        $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
+        $username = htmlspecialchars($row['Username']);
+        $data = htmlspecialchars($row['DataDeComentario']);
+        $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
 
-                    echo "<div class='comment'>";
-                    echo "<form action='PerfilComment.php' method='post'>";
-                    echo "<strong>";
-                    echo "<button type='submit' style='border: none; background: none; padding: 0; font: inherit; cursor: pointer; color: blue; text-decoration: underline;'>";
-                    echo $username;
-                    echo "</button>";
-                    echo "</strong>";
-                    echo "<input type='hidden' name='username' value='" . $username . "'>";
-                    echo "<span>" . $dataFormatada . "</span>";
-                    echo "</form><br>";
-                    echo "<div class='comment-text'>" . $conteudo . "</div>";
-                    echo "</div>";
-                }
+        echo "<div class='comment'>";
+        echo "<form action='PerfilComment.php' method='post'>";
+        echo "<strong>";
+        echo "<button type='submit' style='border: none; background: none; padding: 0; font: inherit; cursor: pointer; color: blue; text-decoration: underline;'>";
+        echo $username;
+        echo "</button>";
+        echo "</strong>";
+        echo "<input type='hidden' name='username' value='" . $username . "'>";
+        echo "<span>" . $dataFormatada . "</span>";
+        echo "</form><br>";
+        echo "<div class='comment-text'>" . $conteudo . "</div>";
+        echo "</div>";
+    }
 
-                echo '</div>';
-            } else {
-                echo '<p>Sem comentários.</p>';
-            }
-            ?>
+    echo '</div>';
+} else {
+    echo '<p>Sem comentários.</p>';
+}
+?>
         </div>
 
 
         <div>
-            <?php
-            echo $commentsHTML;
-            
-            $conn->close();
-            ?>
+<?php
+echo $commentsHTML;
+
+$conn->close();
+?>
         </div>
 
         <div class="add-comment">
@@ -138,14 +136,14 @@ if ($stmt) {
         <div id="userProfileModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close" onclick="closeUserProfileModal()">&times;</span>
-                <?php if ($perfilUsuario): ?>
+<?php if ($perfilUsuario): ?>
                     <div class="avatar">
                     </div>
                     <div id="modalUsername"><?php echo htmlspecialchars($perfilUsuario['nomeUsuario']); ?></div>
                     <p id="modalBio"><?php echo htmlspecialchars($perfilUsuario['biografia']); ?></p>
                     <p>Entrou em: <span id="modalJoinedDate"><?php echo (new DateTime($perfilUsuario['dataDeCriacao']))->format('d/m/Y'); ?></span></p>
                     <p>Conta criada há: <span id="modalAccountAge"><?php echo $mensagemDiasConta; ?></span></p>
-                <?php else: ?>
+<?php else: ?>
                     <p>Usuário não encontrado.</p>
                 <?php endif; ?>
                 <script src="modal.js"></script>

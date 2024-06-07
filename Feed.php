@@ -2,6 +2,7 @@
 require_once 'autenticacao.php';
 autenticacao::checkLogin();
 ?>
+     
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -9,10 +10,11 @@ autenticacao::checkLogin();
         <meta charset="UTF-8">
         <title>Detalhes do Filme</title>
         <link rel="stylesheet" href="FeedStyleSheet.css">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
     </head>
     <body>
+
         <?php
         $conn = new mysqli('localhost', 'root', '', 'webPro');
         if ($conn->connect_error) {
@@ -46,9 +48,9 @@ autenticacao::checkLogin();
                 echo '      <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div><br>';
                 echo '      <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div><br>';
                 echo '      <div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div><br>';
+                echo '  <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
                 echo '    </div>'; // Close inform
                 echo '  </div>'; // Close movie-details
-                echo '  <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
                 echo '  <form action="comments_page.php" method="POST">';
                 echo '    <input type="hidden" name="PostID" value="' . htmlspecialchars($row['PostID']) . '">';
                 echo '    <input type="hidden" name="Titulo" value="' . htmlspecialchars($row['Titulo']) . '">';
@@ -58,6 +60,7 @@ autenticacao::checkLogin();
                 echo '    <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
                 echo '    <button type="submit" class="comment-button">Ver Comentários</button>';
                 echo '  </form>';
+
                 // Condição para mostrar o botão de deletar
                 if ($row['username'] == $nomeUsuario || $row['adm'] == TRUE) {
                     echo '  <form action="delete_post.php" method="POST" style="position: absolute; top: 10px; right: 10px;">';

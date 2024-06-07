@@ -1,20 +1,19 @@
 <?php
-require_once 'autenticacao.php';  
-autenticacao::checkLogin();  
+require_once 'autenticacao.php';
+autenticacao::checkLogin();
 $username = autenticacao::getUsername();
 include 'navBar.php';
-echo $GLOBALS['navbar']; 
-
+echo $GLOBALS['navbar'];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Postagem</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-      <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nova Postagem</title>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+        <style>
             .navbar {
                 width: 100%;
                 background: linear-gradient(to right, #6e45e2, #88d3ce);
@@ -131,52 +130,100 @@ echo $GLOBALS['navbar'];
                 height: 150px;
                 resize: none;
             }
+            .rating {
+                display: flex;
+                justify-content: space-between;
+                max-width: 250px; /* Controla a largura total dos botões */
+            }
+
+            .rating input[type="radio"] {
+                display: none; /* Esconde os botões de rádio padrão */
+            }
+
+            .rating-label {
+                background-color: #f0f0f0;
+                color: #333;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: 2px solid transparent;
+                transition: background-color 0.3s, transform 0.3s;
+                cursor: pointer;
+                flex-grow: 1;
+                text-align: center;
+            }
+
+            .rating input[type="radio"]:checked + .rating-label {
+                background-color: #4CAF50; /* Cor de fundo quando selecionado */
+                color: white;
+                border-color: #4CAF50;
+            }
+
+            .rating-label:hover {
+                background-color: #ddd; /* Cor de fundo ao passar o mouse */
+                transform: scale(1.05); /* Efeito de crescimento ao passar o mouse */
+            }
+
         </style>
-  </head>
-<body>
-    <div class="container">
- <div class="content">
-    <h1>Nova Postagem</h1>
-    <form action="processaPostagem.php" method="post" enctype="multipart/form-data">
+    </head>
+    <body>
+        <div class="container">
+            <div class="content">
+                <h1>Nova Postagem</h1>
+                <form action="processaPostagem.php" method="post" enctype="multipart/form-data">
 
-        <div class="form-group">
-            <label for="title">Título</label>
-            <input type="text" id="title" name="title" required>
-        </div>
+                    <div class="form-group">
+                        <label for="title">Título</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="categories">Categorias</label>
-                <input type="text" id="categories" name="categories" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="categories">Categorias</label>
+                            <input type="text" id="categories" name="categories" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="director">Diretor</label>
+                            <input type="text" id="director" name="director" placeholder="Nome do diretor" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="releaseYear">Ano de Lançamento</label>
+                            <input type="number" id="releaseYear" name="releaseYear" placeholder="Ano" min="1960" max="2024" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <textarea id="description" name="description" required></textarea>
+                    </div>
+
+                    <!-- Adicionando campo de avaliação -->
+                    <div class="form-group">
+                        <label>Avaliação</label>
+                        <div class="rating">
+                            <input type="radio" id="rating1" name="rating" value="1" required><label class="rating-label" for="rating1">1</label>
+                            <input type="radio" id="rating2" name="rating" value="2"><label class="rating-label" for="rating2">2</label>
+                            <input type="radio" id="rating3" name="rating" value="3"><label class="rating-label" for="rating3">3</label>
+                            <input type="radio" id="rating4" name="rating" value="4"><label class="rating-label" for="rating4">4</label>
+                            <input type="radio" id="rating5" name="rating" value="5"><label class="rating-label" for="rating5">5</label>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="imagePath">Imagem</label>
+                        <input type="file" id="imagePath" name="imagePath" accept="image/*" required>
+                    </div>
+
+                    <div class="buttons">
+                        <button type="submit">Publicar</button>
+                        <button type="button" onclick="window.history.back();">Cancelar</button>
+                        <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label for="director">Diretor</label>
-                <input type="text" id="director" name="director" placeholder="Nome do diretor" required>
-            </div>
-
-            <div class="form-group">
-                <label for="releaseYear">Ano de Lançamento</label>
-                <input type="number" id="releaseYear" name="releaseYear" placeholder="Ano" min="1960" max="2024" required>
-            </div>
         </div>
 
-        <div class="form-group">
-            <label for="description">Descrição</label>
-            <textarea id="description" name="description" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="imagePath">Imagem</label>
-            <input type="file" id="imagePath" name="imagePath" accept="image/*" required>
-        </div>
-
-        <div class="buttons">
-            <button type="submit">Publicar</button>
-            <button type="button" onclick="window.history.back();">Cancelar</button>
-                 <input type="hidden" name="username" value="<?php echo htmlspecialchars($username); ?>">
-        </div>
-    </form>
-</div>
-</body>
+    </body>
 </html>
