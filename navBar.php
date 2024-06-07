@@ -6,6 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 // Defina a variável global para a navbar
 $navbar = '
 <div class="navbar">
+    <a href="index.php" class="nav-item"><i class="fas fa-home"></i> Início</a>
     <a href="#search" class="nav-item"><i class="fas fa-search"></i> Pesquisa</a>
     <a href="perfil.php" class="nav-item"><i class="fas fa-user"></i> Perfil</a>';
 
@@ -16,13 +17,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     <a href="Sair.php" class="nav-item"><i class="fas fa-sign-out-alt"></i> Sair</a>';
 }
 
-$navbar .= '
-    <a href="index.php" class="nav-item"><i class="fas fa-home"></i> Início</a>
-</div>';
+$navbar .= '</div>';
 
 // Torne a variável $navbar global
 $GLOBALS['navbar'] = $navbar;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">

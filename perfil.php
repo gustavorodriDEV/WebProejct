@@ -55,10 +55,19 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Perfil do Usuário</title>
-        <link rel="stylesheet" href="estilos.css">
         <link rel="stylesheet" href="Perfil_StyleSheet.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-image: linear-gradient(to right, #6e45e2, #88d3ce, #ffcc2f);
+                display: flex;
+                justify-content: center; /* Centraliza horizontalmente */
+                align-items: center;     /* Centraliza verticalmente */
+                height: 100vh;           /* Garante que o contêiner pai ocupe a altura total da janela */
+                margin: 0;
+
+            }
 
 
         </style>
@@ -79,6 +88,14 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
                 <p id="userBioDisplay" class="placeholder-text"><?php echo htmlspecialchars($biografia); ?></p>
 
             </div>
+            <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
+            <div class="date-container" style="text-align: center; margin-top: 20px;">
+                <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
+                <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
+            </div>
+
+            <script src="scripts.js"></script>
+            <script src="perfil_Script.js"></script>
 
             <div id="infoModal" class="modal">
                 <div class="modal-content">
@@ -100,17 +117,6 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
                     </form>
                 </div>
             </div>
-
-            <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
-
-
-            <div class="date-container" style="text-align: center; margin-top: 20px;">
-                <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
-                <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
-            </div>
-
-            <script src="scripts.js"></script>
-            <script src="perfil_Script.js"></script>
 
     </body>
 </html>

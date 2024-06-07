@@ -53,6 +53,7 @@ if ($stmt) {
         <title>Detalhes do Filme</title>
         <link rel="stylesheet" href="modal.css">
         <link rel="stylesheet" href="comment_StyleSheet.css">
+        
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     </head>
     <body>

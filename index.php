@@ -1,32 +1,34 @@
 <?php
+require_once 'autenticacao.php';
+autenticacao::checkLogin();
+
 include 'navBar.php';
-echo $GLOBALS['navbar']; 
+echo $GLOBALS['navbar'];
+require_once 'FeedClass.php'; // Assegure-se de que este arquivo contém a definição da classe MovieDetails
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Fórum de Discussão</title>
-    <link rel="stylesheet" href="estilos.css"> 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-</head>
-<body>
-    <div class="post-container">
-        <div class="post" onclick="window.location.href = '/postagem-detalhada.html';">
-            <!-- A imagem do perfil inicialmente não é exibida até que uma seja selecionada -->
-            <img src="" alt="Ícone do Usuário" class="imagem-perfil" style="display: none;">
-            <!-- Ícone que será clicável para atualizar a imagem de perfil -->
-            <i class="fas fa-user-circle avatar-icon" onclick="document.getElementById('fileInput').click()"></i>
-            <div class="conteudo-post">
-                <p>Resumo da postagem...</p>
-                <p>Leia mais...</p>
-            </div>
-        </div>
-    </div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Fórum de Discussão</title>
+        <link rel="stylesheet" href="estilos.css"> 
+        <link rel="stylesheet" href="FeedStyleSheet.css">
 
-    <!-- Input de arquivo escondido -->
-    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="atualizarPerfilEPostagens(this)" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    </head>
+    <body>
 
-    <script src="scripts.js"></script>
-</body>
+        <!-- Input de arquivo escondido -->
+        <?php
+        $conn = new mysqli('localhost', 'root', '', 'webPro');
+        if ($conn->connect_error) {
+            die("Conexão falhou: " . $conn->connect_error);
+        }
+
+        // Chamando a função para exibir detalhes do filme
+        MovieDetails::display($conn);
+        $conn->close();
+        ?>
+        <script src="scripts.js"></script>
+    </body>
 </html>

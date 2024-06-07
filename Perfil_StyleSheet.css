@@ -5,18 +5,19 @@
     object-fit: cover;
     border: 3px solid #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 250px;
 }
 .profile-container {
     display: flex;
-    flex-direction: column; /* Isso empilha os filhos verticalmente */
-    align-items: center; /* Centraliza os filhos horizontalmente */
-    justify-content: center; /* Opcional, dependendo de como você quer alinhar os itens verticalmente */
-    width: 550px; /* Ajuste conforme necessário */
-    margin: auto; /* Centraliza o contêiner na página */
-    padding: 20px; /* Espaço interno */
-    background-color: #000000; /* Cor de fundo */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para efeito visual */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 550px;
+    margin: 100px auto 0; /* Adiciona espaço no topo */
+    padding: 20px;
+    background-color: #000;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -28,8 +29,9 @@
     flex-direction: column;   /* Alinha os itens em uma coluna */
     align-items: center;      /* Centraliza os itens na linha do eixo cruzado (horizontalmente) */
     justify-content: center;  /* Centraliza os itens ao longo do eixo principal (verticalmente) */
-    margin-top: 20px;         /* Espaço no topo para separação adequada, ajuste conforme necessário */
+    /* Aumento da margem superior para deslocar o avatar para baixo */
 }
+
 
 .avatar1 {
     background-image: url('path_to_your_image.jpg'); /* Adicione o ponto e vírgula corretamente */
@@ -47,10 +49,11 @@
 
 
 .info-container {
-    width: 100%;        /* Ocupa toda a largura do contêiner pai */
-    padding: 20px;      /* Espaço interno para afastar o conteúdo das bordas */
+    width: 100%;         /* Ocupa toda a largura do contêiner pai ou ajuste conforme necessário */
+    padding: 20px;       /* Espaço interno para afastar o conteúdo das bordas */
     box-sizing: border-box; /* Garante que o padding não adicione largura extra */
 }
+
 
 
 #userNameDisplay, #userDescriptionDisplay {

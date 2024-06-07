@@ -6,14 +6,15 @@ body, html {
 /*Cor do body*/
 body {
     font-family: 'Arial', sans-serif;
-    background-image: linear-gradient(to bottom, #6e45e2, #88d3ce, #ffcc2f);
+    background-image: linear-gradient(to right, #6e45e2, #88d3ce, #ffcc2f);
     margin: 0;
     padding: 0;
-    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    
 }
+
 /*fim da body*/
 
 .login-container {
@@ -21,7 +22,7 @@ body {
     padding: 40px;
     border-radius: 20px;
     color: white;
-    max-width: 400px;
+    max-width: 400px; /* Limita a largura máxima para evitar que o formulário fique muito largo em telas grandes */
     box-shadow: 0 4px 8px rgba(0,0,0,0.5);
     display: flex;
     flex-direction: column;
@@ -29,6 +30,7 @@ body {
     justify-content: center;
     text-align: center;
 }
+
 
 input[type="text"],
 input[type="password"],
@@ -64,26 +66,6 @@ a, button[type="button"] {
     display: block;
     text-align: center;
     margin-top: 10px;
-}
-
-.button-like-link {
-    display: inline-block;
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 5px;
-    background: linear-gradient(to right, #0056b3, #4a00e0, #d500f9);
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.button-like-link:hover {
-    background-color: rgb(140, 68, 188);
 }
 
 
@@ -278,12 +260,12 @@ button:hover {
 }
 
 .modal-content {
-    background-color: #000; 
-    margin: 10% auto; 
+    background-color: #000;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%; 
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); 
+    width: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border-radius: 10px;
 }
 
@@ -305,55 +287,35 @@ button:hover {
 
 /* Estilo para o campo de descrição */
 textarea {
-    width: 100%; 
-    height: 100px; 
-    padding: 10px; 
+    width: 100%;
+    height: 100px;
+    padding: 10px;
     box-sizing: border-box;
     border: 2px solid #ccc;
-    border-radius: 4px; 
+    border-radius: 4px;
     background-color: #f8f8f8;
-    resize: none; 
-    font-size: 16px; 
+    resize: none;
+    font-size: 16px;
 }
 
 
 /*Index */
 .post-container {
     padding: 20px;
-    max-width: 100%; 
+    max-width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
 }
 
-.post {
-    background-color: #f6f484;
-    border-radius: 30px;
-    padding: 35px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    color: #000;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    width: 900%;
-    ; /* Ajuste a largura das postagens aqui */
-    max-width: 800px; /* Ou defina uma largura máxima fixa */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Opção de sombra para dar profundidade */
-}
+
 
 .post:hover {
     background-color: #f1e4a2;
 
 }
 
-.imagem-perfil {
-    border-radius: 50%;
-    margin-right: 20px;
-    width: 50px;
-    height: 50px;
-    flex-shrink: 0;
-}
+
 
 .conteudo-post {
     flex-grow: 1;
@@ -366,3 +328,21 @@ textarea {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+
+@media (min-width: 768px) {
+    .content {
+        flex-direction: row;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-image {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+
+
+

@@ -131,3 +131,8 @@ body {
         max-width: 100%;
     }
 }
+
+.fas fa-star {
+        display: inline-block; /* Assegura que as estrelas fiquem na mesma linha */
+        margin-right: 5px; /* Adiciona espaço entre as estrelas */
+    }
