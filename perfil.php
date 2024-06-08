@@ -66,10 +66,7 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
                 align-items: center;     /* Centraliza verticalmente */
                 height: 100vh;           /* Garante que o contêiner pai ocupe a altura total da janela */
                 margin: 0;
-
             }
-
-
         </style>
     </head>
     <body>

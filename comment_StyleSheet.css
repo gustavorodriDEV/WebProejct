@@ -31,6 +31,17 @@ body {
     align-items: center; /* Novo: Alinha todos os filhos ao centro verticalmente */
 }
 
+.movie-details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1024px;
+    margin: auto;
+    margin-top: 15px;
+    margin-left: 10px;
+}
 
 
 @media (min-width: 768px) {
@@ -70,12 +81,17 @@ body {
 
 
 
-
 .movie-description {
-    font-size: var(--font-size-normal);
-    margin-top: 210px; /* Assegura espaÃ§o acima da descriÃ§Ã£o */
-    width: 50%; /* Ocupa a largura total dentro de .content */
+    width: 100%;            /* Ajusta a largura do contêiner */
+    text-align: center;     /* Centraliza o texto */
+    overflow-wrap: break-word; /* Garante a quebra de linha em palavras longas */
+    box-sizing: border-box; /* Calcula o padding e a borda no width total */
+    padding: 40px;          /* Adiciona padding para evitar que o texto toque as bordas */
+    margin: auto;           /* Opcional: centraliza o contêiner se não estiver dentro de um flex ou grid layout */
 }
+
+
+
 
 
 
@@ -86,16 +102,12 @@ body {
 }
 
 
-.inform {
-    flex: 1 1 50%;
-    display: flex;
-    flex-direction: column;
-    gap: -1px;
+
+.value {
+    display: inline-block; /* Permite que os valores fiquem lado a lado */
+    margin-left: 0px;
 }
 
-.inform strong, .inform br {
-    margin-bottom: 1px;
-}
 
 @media (max-width: 768px) {
     .movie-image {
@@ -196,9 +208,9 @@ body {
     background-color: #4267B2;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 40px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     transition: background-color 0.25s ease-in-out;
 }
 

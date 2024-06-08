@@ -1,4 +1,5 @@
 <?php
+$postID = intval($_POST['PostID'] ?? 0);
 
 class MovieDetails {
 
@@ -70,7 +71,57 @@ class MovieDetails {
     }
 }
 
+
+
+
+class PostAdicionado {
+    public static function displaySelectedPost($conn, $postID) {
+        if ($postID > 0) {
+            $sql = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.adm, u.FotoPerfil, a.Pontuacao, a.DataDaAvaliacao 
+                    FROM posts p
+                    LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
+                    LEFT JOIN Avaliacoes a ON p.PostID = a.PostID
+                    WHERE p.PostID = ?";
+
+            $stmt = $conn->prepare($sql);
+            if (!$stmt) {
+                die('Erro na preparação da consulta: ' . $conn->error);
+            }
+
+            $stmt->bind_param("i", $postID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                foreach ($result as $row) {
+                    echo '<div class="selected-content">';
+                    echo '  <div class="movie-details">';
+                    echo '    <div class="movie-image">';
+                    echo '      <img src="' . htmlspecialchars($row['Caminho_Imagem']) . '" alt="Imagem do filme" style="width: 100%; max-width: 400px;">';
+                    echo '    </div>'; // Close movie-image
+                    echo '    <div class="movie-info">';
+                    echo '      <div class="info-item"><strong>Título do filme:</strong> <span>' . htmlspecialchars($row['Titulo']) . '</span></div>';
+                    echo '      <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div>';
+                    echo '      <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div>';
+                    echo '      <div class="info-item"><strong>Ano de lançamento:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div>';
+                    echo '      <div class="info-item"><strong>Descrição:</strong> <span>' . nl2br(htmlspecialchars($row['Descricao'])) . '</span></div>';
+                    echo '    </div>'; // Close movie-info
+                    echo '  </div>'; // Close movie-details
+                    echo '</div>'; // Close selected-content
+                }
+            } else {
+                echo "<p>Post não encontrado.</p>";
+            }
+
+            $stmt->close();
+        } else {
+            echo "<p>ID inválido.</p>";
+        }
+    }
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -80,6 +131,8 @@ class MovieDetails {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     </head>
     <body>
+        
+        <p><?php echo $postID?></p>
      
         <?php
         $conn = new mysqli('localhost', 'root', '', 'webPro');
@@ -87,7 +140,6 @@ class MovieDetails {
             die("Conexão falhou: " . $conn->connect_error);
         }
 
-        // Chamando a função para exibir detalhes do filme
         MovieDetails::display($conn);
         $conn->close();
         ?>
