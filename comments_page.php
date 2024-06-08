@@ -143,7 +143,6 @@ if ($stmt) {
         <div class="add-comment">
             <h3>Faça um Comentário</h3>
             <form action="inserecomentario.php" method="POST">
-                <!-- Campo oculto para PostID -->
                 <input type="hidden" name="PostID" value="<?php echo isset($postID) ? htmlspecialchars($postID) : ''; ?>">
                 <input type="hidden" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>">
                 <textarea id="conteudo" name="conteudo" required></textarea>
@@ -151,21 +150,6 @@ if ($stmt) {
             </form>
         </div>
 
-        <div id="userProfileModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close" onclick="closeUserProfileModal()">&times;</span>
-                <?php if ($perfilUsuario): ?>
-                    <div class="avatar">
-                    </div>
-                    <div id="modalUsername"><?php echo htmlspecialchars($perfilUsuario['nomeUsuario']); ?></div>
-                    <p id="modalBio"><?php echo htmlspecialchars($perfilUsuario['biografia']); ?></p>
-                    <p>Entrou em: <span id="modalJoinedDate"><?php echo (new DateTime($perfilUsuario['dataDeCriacao']))->format('d/m/Y'); ?></span></p>
-                    <p>Conta criada há: <span id="modalAccountAge"><?php echo $mensagemDiasConta; ?></span></p>
-                <?php else: ?>
-                    <p>Usuário não encontrado.</p>
-                <?php endif; ?>
-                <script src="modal.js"></script>
-            </div>
 
     </body>
 

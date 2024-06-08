@@ -7,7 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
 $navbar = '
 <div class="navbar">
     <a href="index.php" class="nav-item"><i class="fas fa-home"></i> Início</a>
-    <a href="#search" class="nav-item"><i class="fas fa-search"></i> Pesquisa</a>
     <a href="perfil.php" class="nav-item"><i class="fas fa-user"></i> Perfil</a>';
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {

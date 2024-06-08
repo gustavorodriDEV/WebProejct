@@ -8,7 +8,6 @@ if ($conn->connect_error) {
     die('Conexão falhou: ' . $conn->connect_error);
 }
 
-// Verifica se os dados foram enviados pelo método POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['PostID'], $_POST['username'])) {
     // Capturar e sanitizar os dados enviados via POST
     $postID = intval($_POST['PostID']);
@@ -22,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['Po
     $DataDeComentario = new DateTime();
     $dataHora = $DataDeComentario->format('Y-m-d H:i:s'); // Formata a data e hora para uma string compatível com SQL
 
-    // SQL para inserir o novo comentário junto com a data e hora
     $sql = "INSERT INTO comentarios (PostID, Username, Conteudo, DataDeComentario) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
@@ -30,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['Po
         $stmt->execute();
         $stmt->close();
 
-        // Preparar para redirecionar enviando POSTID via POST
         echo "<form id='redirectForm' action='comments_page.php' method='POST' style='display:none;'>
                 <input type='hidden' name='PostID' value='$postID'>
               </form>

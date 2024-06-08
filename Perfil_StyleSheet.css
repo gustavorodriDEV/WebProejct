@@ -5,8 +5,10 @@
     object-fit: cover;
     border: 3px solid #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 250px;
+    margin-top: 45px;
+  
 }
+
 .profile-container {
     display: flex;
     flex-direction: column;
@@ -33,12 +35,6 @@
 }
 
 
-.avatar1 {
-    background-image: url('path_to_your_image.jpg'); /* Adicione o ponto e vírgula corretamente */
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
 
 .user-name {
     font-size: 25px;
