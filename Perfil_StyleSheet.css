@@ -1,3 +1,13 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: linear-gradient(to right, #6e45e2, #88d3ce, #ffcc2f);
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    height: 100vh;           /* Garante que o contêiner pai ocupe a altura total da janela */
+    margin: 0;
+}
+
 .profile-image {
     width: 150px;
     height: 150px;
@@ -6,7 +16,7 @@
     border: 3px solid #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 45px;
-  
+
 }
 
 .profile-container {
@@ -15,7 +25,7 @@
     align-items: center;
     justify-content: center;
     width: 550px;
-    margin: 100px auto 0; /* Adiciona espaço no topo */
+    margin: 100px auto 0;
     padding: 20px;
     background-color: #000;
     border-radius: 10px;
@@ -25,7 +35,7 @@
 
 
 .avatar {
-    width: 100%;              /* Garante que ocupa a largura total do contêiner pai */
+    width: 70%;              /* Garante que ocupa a largura total do contêiner pai */
     text-align: center;       /* Centraliza o conteúdo horizontalmente */
     display: flex;            /* Usa flexbox para controle de layout */
     flex-direction: column;   /* Alinha os itens em uma coluna */
@@ -45,8 +55,8 @@
 
 
 .info-container {
-    width: 100%;         /* Ocupa toda a largura do contêiner pai ou ajuste conforme necessário */
-    padding: 20px;       /* Espaço interno para afastar o conteúdo das bordas */
+    width: 70%;        
+    padding: 20px;      
     box-sizing: border-box; /* Garante que o padding não adicione largura extra */
 }
 
@@ -57,9 +67,7 @@
     font-size: 24px;
 }
 
-.placeholder-text {
-    color: #888181;
-}
+
 
 .date-container {
     position: absolute; /* Posiciona-se relativamente ao container pai */
@@ -102,3 +110,15 @@ profile-input:focus {
     resize: none;
     height: 100px;
 }
+
+.placeholder-text {
+    overflow-wrap: break-word;  /* Garante que as palavras longas quebrem e se ajustem ao contêiner */
+    hyphens: auto;             /* Adiciona hifens automaticamente se necessário (funciona melhor em idiomas configurados) */
+    word-wrap: break-word;     /* Quebra palavras para evitar overflow horizontal */
+    white-space: normal;       /* Permite que o texto envolva naturalmente sem preservar espaços em branco excessivos */
+    line-height: 1.6;          /* Melhora a legibilidade ajustando a altura da linha */
+    text-align: justify;       /* Justifica o texto, o que pode ajudar a preencher linhas de forma mais uniforme */
+}
+
+
+

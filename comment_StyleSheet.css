@@ -83,18 +83,13 @@ body {
 
 
 .movie-description {
-    width: 100%;            /* Ajusta a largura do contêiner */
+    width: 45%;            /* Ajusta a largura do contêiner */
     text-align: center;     /* Centraliza o texto */
     overflow-wrap: break-word; /* Garante a quebra de linha em palavras longas */
     box-sizing: border-box; /* Calcula o padding e a borda no width total */
     padding: 40px;          /* Adiciona padding para evitar que o texto toque as bordas */
     margin: auto;           /* Opcional: centraliza o contêiner se não estiver dentro de um flex ou grid layout */
 }
-
-
-
-
-
 
 .movie-img img {
     width: 300px;
@@ -120,12 +115,13 @@ body {
 /*comentarios*/
 
 .comment {
-    background-color: #f9f9f9;
+    background-color: rgba(249, 249, 249, 0.5); 
     margin: 10px 0;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 
 .comment form {
     display: flex;
@@ -147,12 +143,12 @@ body {
 .comment span {
     font-size: 0.85rem;
     color: #666;
-    margin-left: 15px;
+    margin-left: 1px;
 }
 
 .comment-text {
     margin-top: 10px;
-    font-size: 0.95rem;
+    font-size: 0.99rem;
     line-height: 1.4;
     color: #333;
 }
@@ -162,7 +158,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 20px 10px;
+    padding: 14px 10px;
     background: #fff;
     box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
     z-index: 1000;
@@ -186,21 +182,21 @@ body {
 }
 
 .add-comment textarea {
-    padding: 12px 15px;          /* Espaço interno para um bom espaçamento do texto */
-    border: 2px solid #d1d1d1;   /* Cor de borda sutil */
-    border-radius: 15px;         /* Bordas bem arredondadas */
-    height: 60px;                /* Altura menor */
-    width: 500px;                /* Largura reduzida */
-    resize: none;                /* Desabilita o redimensionamento pelo usuário */
-    outline: none;               /* Remove o contorno ao focar */
-    font-family: 'Arial', sans-serif; /* Fonte consistente com o resto do
-    font-size: 16px; /* Tamanho de fonte maior para melhor leitura */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra leve para profundidade */
+    padding: 12px 15px;         
+    border: 2px solid #d1d1d1;   
+    border-radius: 15px;         
+    height: 60px;                
+    width: 500px;               
+    resize: none;                
+    outline: none;               
+    font-family: 'Arial', sans-serif; 
+    font-size: 16px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
 }
 
 .add-comment textarea:focus {
-    border-color: #007bff; /* Cor de foco mais vibrante */
-    box-shadow: 0 0 8px rgba(0,123,255,0.2); /* Sombra externa para destacar */
+    border-color: #007bff; 
+    box-shadow: 0 0 8px rgba(0,123,255,0.2); 
 }
 
 
@@ -212,9 +208,35 @@ body {
     border-radius: 40px;
     cursor: pointer;
     font-size: 20px;
-    transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.25s 
 }
 
 .add-comment input[type="submit"]:hover {
     background-color: #365899;
 }
+
+.comments-section {
+    font-size: 30px; 
+    margin: -110px 0;
+    padding: 200px; 
+    border-radius: 5px; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+    width: 80%;
+}
+
+
+@media (max-width: 768px) {
+    .comments-section {
+        font-size: 24px; 
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .comments-section {
+        font-size: 18px; 
+        padding: 20px; 
+        width: 95%; 
+    }
+}
+

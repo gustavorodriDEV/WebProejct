@@ -99,9 +99,16 @@ body {
 
 
 .movie-description {
+    width: 60%;
     font-size: var(--font-size-normal);
     margin-top: 30px;
-    margin-left: 154px; 
+    margin-left: 154px;
+    overflow-wrap: break-word;  /* Garante que as palavras longas quebrem e se ajustem ao contêiner */
+    hyphens: auto;             /* Adiciona hifens automaticamente se necessário (funciona melhor em idiomas configurados) */
+    word-wrap: break-word;     /* Quebra palavras para evitar overflow horizontal */
+    white-space: normal;       /* Permite que o texto envolva naturalmente sem preservar espaços em branco excessivos */
+    line-height: 1.6;          /* Melhora a legibilidade ajustando a altura da linha */
+    text-align: justify;
 }
 
 
@@ -134,6 +141,34 @@ body {
 }
 
 .fas fa-star {
-        display: inline-block; /* Assegura que as estrelas fiquem na mesma linha */
-        margin-right: 5px; /* Adiciona espaço entre as estrelas */
-    }
+    display: inline-block; /* Assegura que as estrelas fiquem na mesma linha */
+    margin-right: 5px; /* Adiciona espaço entre as estrelas */
+}
+
+.mod {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    animation: fadeIn 1s;
+}
+
+.mod-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}

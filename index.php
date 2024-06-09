@@ -18,7 +18,7 @@ require_once 'FeedClass.php'; // Assegure-se de que este arquivo contém a defin
     </head>
     <body>
 
-        <!-- Input de arquivo escondido -->
+    
         <?php
         $conn = new mysqli('localhost', 'root', '', 'webPro');
         if ($conn->connect_error) {

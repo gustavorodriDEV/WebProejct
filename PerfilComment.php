@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Após recuperar os dados do banco de dados
+
 $stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
 $stmt->bind_param("s", $nomeUsuario);
 $stmt->execute();
@@ -79,28 +79,6 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
                 <p id="userBioDisplay" class="placeholder-text"><?php echo htmlspecialchars($biografia); ?></p>
 
             </div>
-
-            <div id="infoModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
-                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                        <label for="bio" style="color: white;">Biografia:</label>
-                        <textarea id="bio" name="bio" rows="4" cols="50" maxlength="200"></textarea>
-                        <input type="hidden" name="action" value="updateBio">
-                        <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
-                    </form>
-                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                        <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
-                        <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
-                        <input type="hidden" name="action" value="uploadFoto">
-                    </form>
-                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="removeFoto">
-                        <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
-                    </form>
-                </div>
-            </div>
-
             <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
 
 

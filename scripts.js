@@ -72,3 +72,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 });
+
+
+function hideMessage(id) {
+    var element = document.getElementById(id);
+    if (element) {
+        setTimeout(function() {
+            element.style.display = 'none'; // Oculta a mensagem
+        }, 5000); // Tempo em milissegundos (5000 ms = 5 segundos)
+    }
+}
+
+// Chame esta função para cada mensagem que você deseja ocultar automaticamente
+hideMessage('errorMessage');
+hideMessage('successMessage');

@@ -1,49 +1,57 @@
-<?php
-session_start(); // Iniciar a sessão
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="estilos.css">
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-image: linear-gradient(to right, #6e45e2, #88d3ce, #ffcc2f);
+                display: flex;
+                justify-content: center; /* Centraliza horizontalmente */
+                align-items: center;     /* Centraliza verticalmente */
+                height: 100vh;           /* Garante que o contêiner pai ocupe a altura total da janela */
+                margin: 0;
 
-// Conexão com o banco de dados
-$host = "localhost";
-$user = "root";
-$password = "";
-$dbname = "webpro";
-$conn = new mysqli($host, $user, $password, $dbname);
+            }
 
-// Verificar conexão
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+            .alert {
+                padding: 10px;
+                color: white;
+                background-color: red;
+                text-align: center;
+                margin-bottom: 20px;
+            }
 
-// Obter username e password do formulário
-$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-$passwordForm = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        </style>
+    </head>
+    <body>
+        <?php
+        session_start();
+        ?>
 
-// Buscar usuário pelo nome de usuário no banco
-$sql = "SELECT senha FROM perfilusuario WHERE nomeUsuario = ?";
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    die('Erro de preparação: ' . htmlspecialchars($conn->error));
-}
+        <div class="login-container">
+            <h1>Login</h1>
+            <p>faça o seu login :)</p>
+            <form action="login2.php" method="post" > 
+                <input type="text" placeholder="Usuário" name="username" required> 
+                <input type="password" placeholder="Senha" name="password" required> 
+                <button type="submit">Entra</button>
+                <a href="cadastro.php" class="button-like-link">Inscrever-se</a> 
+            </form>
 
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+            <?php if (isset($_SESSION['error_message'])): ?>
+                <div class="alert">
+                    <?php echo $_SESSION['error_message']; ?>
+                    <?php unset($_SESSION['error_message']); ?>
+                </div>
+            <?php endif; ?>
 
-if ($user = $result->fetch_assoc()) {
-    if (!password_verify($passwordForm, $user['senha'])) {
-        echo "Falha na autenticação.";
-        exit;
-    } else {
-        // A senha está correta, configurar a sessão
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username;
+        </div>
 
-        header("Location: index.php");
-        exit;
-    }
-} else {
-    echo "Nome de usuário não encontrado.";
-}
+        <script src="scripts.js"></script>
 
-$stmt->close();
-$conn->close();
-?>
+    </body>
+</html>

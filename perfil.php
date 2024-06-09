@@ -57,17 +57,7 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         <title>Perfil do Usuário</title>
         <link rel="stylesheet" href="Perfil_StyleSheet.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-image: linear-gradient(to right, #6e45e2, #88d3ce, #ffcc2f);
-                display: flex;
-                justify-content: center; /* Centraliza horizontalmente */
-                align-items: center;     /* Centraliza verticalmente */
-                height: 100vh;           /* Garante que o contêiner pai ocupe a altura total da janela */
-                margin: 0;
-            }
-        </style>
+
     </head>
     <body>
         <div class="avatar">
@@ -80,40 +70,41 @@ if ($dataDeCriacaoFormatada == $dataAtualFormatada) {
         </div>
 
         <div class="info-container">
+            <div class="divider"></div>
             <div class="name-description">
-                <p id="userNameDisplay" class="placeholder-text"><?php echo htmlspecialchars($nomeUsuarioRetornado); ?></p>
-                <p id="userBioDisplay" class="placeholder-text"><?php echo htmlspecialchars($biografia); ?></p>
-
+                <p id="userNameDisplay" class="placeholder-text"><?php echo nl2br(htmlspecialchars($nomeUsuarioRetornado)); ?></p>
+                <p id="userBioDisplay" class="placeholder-text"><?php echo nl2br(htmlspecialchars($biografia)); ?></p>
             </div>
-            <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
-            <div class="date-container" style="text-align: center; margin-top: 20px;">
-                <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
-                <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
-            </div>
+        </div>
+        <div id="bioErrorMessage" style="color: red; display: none; margin-bottom: 10px;"></div>
+        <div class="date-container" style="text-align: center; margin-top: 20px;">
+            <p>Entrou em: <?php echo $dataDeCriacao->format('d/m/Y'); ?></p>
+            <p class="creation-time-statement">Conta criada: <span class="time-detail"><?php echo $mensagemDiasConta; ?></span></p>
+        </div>
 
-            <script src="scripts.js"></script>
-            <script src="perfil_Script.js"></script>
+        <script src="scripts.js"></script>
+        <script src="perfil_Script.js"></script>
 
-            <div id="infoModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
-                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                        <label for="bio" style="color: white;">Biografia:</label>
-                        <textarea id="bio" name="bio" rows="4" cols="50" maxlength="200"></textarea>
-                        <input type="hidden" name="action" value="updateBio">
-                        <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
-                    </form>
-                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                        <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
-                        <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
-                        <input type="hidden" name="action" value="uploadFoto">
-                    </form>
-                    <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="removeFoto">
-                        <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
-                    </form>
-                </div>
+        <div id="infoModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('infoModal').style.display = 'none';">&times;</span>
+                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                    <label for="bio" style="color: white;">Biografia:</label>
+                    <textarea id="bio" name="bio" rows="4" cols="50" maxlength="200"></textarea>
+                    <input type="hidden" name="action" value="updateBio">
+                    <button type="submit" style="color: white; background-color: black;">Atualizar Biografia</button>
+                </form>
+                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                    <button type="button" onclick="document.getElementById('fileInput').click();" style="color: white; background-color: black;">Trocar Foto de Perfil</button>
+                    <input id="fileInput" type="file" name="image" style="display: none;" onchange="this.form.submit();">
+                    <input type="hidden" name="action" value="uploadFoto">
+                </form>
+                <form action="updatePerfil.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="removeFoto">
+                    <button type="submit" style="background-color: red; color: white;">Remover Foto de Perfil</button>
+                </form>
             </div>
+        </div>
 
     </body>
 </html>

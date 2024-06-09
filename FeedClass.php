@@ -44,7 +44,6 @@ class MovieDetails {
                     echo 'Não avaliado';
                 }
                 echo '</span></div><br>';
-                echo '      <div class="movie-description">' . nl2br(htmlspecialchars($row['Descricao'])) . '</div>';
                 echo '    </div>'; // Close inform
                 echo '  </div>'; // Close movie-details
                 echo '  <form action="comments_page.php" method="POST">';
