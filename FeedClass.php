@@ -1,14 +1,16 @@
 <?php
-$postID = intval($_POST['PostID'] ?? 0);
 
 class MovieDetails {
 
     public static function display($conn) {
         $sql = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.adm, u.FotoPerfil, a.Pontuacao, a.DataDaAvaliacao 
-                FROM posts p
-                LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
-                LEFT JOIN Avaliacoes a ON p.PostID = a.PostID
-                ORDER BY p.DataDeLancamento DESC";
+            FROM posts p
+            LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
+            LEFT JOIN Avaliacoes a ON p.PostID = a.PostID
+            WHERE (p.Titulo IS NOT NULL AND p.Titulo != '' AND p.Titulo != '0')
+              AND (p.Diretor IS NOT NULL AND p.Diretor != '' AND p.Diretor != '0')
+              AND (p.Descricao IS NOT NULL AND p.Descricao != '' AND p.Descricao != '0')
+            ORDER BY p.DataDeLancamento DESC";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -131,7 +133,7 @@ class PostAdicionado {
     </head>
     <body>
         
-        <p><?php echo $postID?></p>
+  
      
         <?php
         $conn = new mysqli('localhost', 'root', '', 'webPro');

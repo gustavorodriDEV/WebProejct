@@ -2,15 +2,10 @@
 session_start();
 require_once 'autenticacao.php';
 autenticacao::checkLogin();
+require 'conexao.php';
 $nomeUsuario = $_POST['username'];
 include 'navBar.php';
 echo $GLOBALS['navbar'];
-
-$conn = new mysqli('localhost', 'root', '', 'webPro');
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
-
 
 $stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
 $stmt->bind_param("s", $nomeUsuario);

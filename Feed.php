@@ -1,6 +1,6 @@
 <?php
 require_once 'autenticacao.php';
-require_once 'FeedClass.php'; // Assegure-se de que este arquivo contém a definição da classe MovieDetails
+require_once 'FeedClass.php';
 
 autenticacao::checkLogin();
 if (!defined('USERNAME')) {

@@ -4,7 +4,7 @@ autenticacao::checkLogin();
 
 include 'navBar.php';
 echo $GLOBALS['navbar'];
-require_once 'FeedClass.php'; // Assegure-se de que este arquivo contém a definição da classe MovieDetails
+require_once 'FeedClass.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -17,15 +17,8 @@ require_once 'FeedClass.php'; // Assegure-se de que este arquivo contém a defin
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     </head>
     <body>
-
-    
         <?php
-        $conn = new mysqli('localhost', 'root', '', 'webPro');
-        if ($conn->connect_error) {
-            die("Conexão falhou: " . $conn->connect_error);
-        }
-
-        // Chamando a função para exibir detalhes do filme
+        require 'conexao.php';
         MovieDetails::display($conn);
         $conn->close();
         ?>

@@ -10,52 +10,45 @@ class VisitarUsuario {
 
     public function __construct($nomeUsuario = null) {
         $this->nomeUsuario = $nomeUsuario ? $nomeUsuario : autenticacao::getUsername();
+    }
+
+    function buscarInformacoesUsuario($nomeUsuario) {
+        require 'conexao.php';
+
+        $stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
+        if (!$stmt) {
+            echo "Erro de preparação: " . $conn->error;
+            return [];
         }
 
-  
-
-       function buscarInformacoesUsuario($nomeUsuario) {
-    $conn = new mysqli('localhost', 'root', '', 'webPro');
-    if ($conn->connect_error) {
-        die("Falha na conexão: " . $conn->connect_error);
+        $stmt->bind_param("s", $nomeUsuario);
+        $stmt->execute();
+        $result = $stmt->get_result(); // Mudar para get_result para usar fetch_assoc
+        if ($row = $result->fetch_assoc()) {
+            $stmt->close();
+            $conn->close();
+            return $row;
+        } else {
+            $stmt->close();
+            $conn->close();
+            return []; // Retorna um array vazio se não encontrar o usuário
+        }
     }
 
-    $stmt = $conn->prepare("SELECT nomeUsuario, biografia, DataDeCriacao, fotoPerfil FROM perfilusuario WHERE nomeUsuario = ?");
-    if (!$stmt) {
-        echo "Erro de preparação: " . $conn->error;
-        return [];
+    public function getPerfilUsuario() {
+        if (isset($_POST['nomeUsuario']) && !empty($_POST['nomeUsuario'])) {
+            $nomeUsuario = $_POST['nomeUsuario'];
+        } else {
+            echo "Nome de usuário não fornecido.";
+            return []; // Retorna um array vazio se não for fornecido um nome de usuário
+        }
+
+        if (!$this->perfilUsuario) {
+            $this->perfilUsuario = $this->buscarInformacoesUsuario($nomeUsuario);
+        }
+
+        return $this->perfilUsuario;
     }
-
-    $stmt->bind_param("s", $nomeUsuario);
-    $stmt->execute();
-    $result = $stmt->get_result(); // Mudar para get_result para usar fetch_assoc
-    if ($row = $result->fetch_assoc()) {
-        $stmt->close();
-        $conn->close();
-        return $row;
-    } else {
-        $stmt->close();
-        $conn->close();
-        return []; // Retorna um array vazio se não encontrar o usuário
-    }
-}
-
-
-public function getPerfilUsuario() {
-    if (isset($_POST['nomeUsuario']) && !empty($_POST['nomeUsuario'])) {
-        $nomeUsuario = $_POST['nomeUsuario'];
-    } else {
-        echo "Nome de usuário não fornecido.";
-        return []; // Retorna um array vazio se não for fornecido um nome de usuário
-    }
-
-    if (!$this->perfilUsuario) {
-        $this->perfilUsuario = $this->buscarInformacoesUsuario($nomeUsuario);
-    }
-
-    return $this->perfilUsuario;
-}
-
 
     public function calcularTempoDeConta() {
         if (!$this->perfilUsuario) {

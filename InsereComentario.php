@@ -1,12 +1,7 @@
 <?php
-session_start(); // Inicia a sessão no início do script
+session_start(); 
 require_once 'autenticacao.php';
-
-// Conectar ao banco de dados
-$conn = new mysqli('localhost', 'root', '', 'webPro');
-if ($conn->connect_error) {
-    die('Conexão falhou: ' . $conn->connect_error);
-}
+require 'conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['conteudo'], $_POST['PostID'], $_POST['username'])) {
     // Capturar e sanitizar os dados enviados via POST

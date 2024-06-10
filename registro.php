@@ -1,14 +1,6 @@
 <?php
 session_start();
-$host = "localhost";
-$user = "root";
-$password = "";
-$dbname = "webpro";
-$conn = new mysqli($host, $user, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+require 'conexao.php';
 
 $name = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);

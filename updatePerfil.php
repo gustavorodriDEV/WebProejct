@@ -1,10 +1,8 @@
 <?php
 require_once 'autenticacao.php';
 autenticacao::checkLogin();
-$conn = new mysqli('localhost', 'root', '', 'webPro');
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+require 'conexao.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: perfil.php');

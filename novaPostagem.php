@@ -27,8 +27,34 @@ echo $GLOBALS['navbar'];
                     <div class="form-row">
                         <div class="form-group">
                             <label for="categories">Categorias</label>
-                            <input type="text" id="categories" name="categories" required>
+                            <select id="categories" name="categories" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="acao">Ação</option>
+                                <option value="aventura">Aventura</option>
+                                <option value="comedia">Comédia</option>
+                                <option value="drama">Drama</option>
+                                <option value="terror">Terror</option>
+                                <option value="romance">Romance</option>
+                                <option value="sci-fi">Sci-Fi</option>
+                                <option value="documentario">Documentário</option>
+                                <option value="fantasia">Fantasia</option>
+                                <option value="suspense">Suspense</option>
+                                <option value="animacao">Animação</option>
+                                <option value="musical">Musical</option>
+                                <option value="historico">Histórico</option>
+                                <option value="esportes">Esportes</option>
+                                <option value="guerra">Guerra</option>
+                                <option value="policial">Policial</option>
+                                <option value="biografia">Biografia</option>
+                                <option value="western">Western</option>
+                                <option value="noir">Noir</option>
+                                <option value="ficcao">Ficção</option>
+                                <option value="thriller">Thriller</option>
+                                <option value="mistério">Mistério</option>
+                                <option value="familia">Família</option>
+                            </select>
                         </div>
+
 
                         <div class="form-group">
                             <label for="director">Diretor</label>

@@ -2,18 +2,13 @@
 session_start();
 require_once 'autenticacao.php';
 autenticacao::checkLogin();
+require 'conexao.php';
 $nomeUsuario = autenticacao::getUsername();
 include 'navBar.php';
 echo $GLOBALS['navbar'];
-// Iniciando conexão
-$conn = new mysqli('localhost', 'root', '', 'webPro');
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
-}
 
 $postID = intval($_POST['PostID'] ?? 0);
 
-// Consulta SQL para obter os detalhes do post
 $sqlPost = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil
             FROM posts p
             LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
@@ -30,7 +25,6 @@ if ($stmt) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
 
-        // Usando htmlspecialchars para evitar XSS
         $titulo = htmlspecialchars($row['Titulo']);
         $diretor = htmlspecialchars($row['Diretor']);
         $categoria = htmlspecialchars($row['Categoria']);
@@ -93,15 +87,43 @@ if ($stmt) {
 
         <div class="movie-description">
             <?= $descricao_formatada = wordwrap($descricao, 70, "<br />\n", true);
- ?>
+            ?>
         </div>
-
 
         <div>
             <?php
 // Consulta para buscar comentários
             $sqlComentarios = "SELECT Conteudo, Username, DataDeComentario FROM comentarios WHERE PostID = $postID ORDER BY DataDeComentario DESC";
             $resultComentarios = $conn->query($sqlComentarios);
+
+            function tempoRelativo($data) {
+                date_default_timezone_set('America/Sao_Paulo');
+
+                $timestamp = strtotime($data);
+                $diferenca = time() - $timestamp;
+                $minutos = floor($diferenca / 60);
+                $horas = floor($diferenca / 3600);
+                $dias = floor($diferenca / 86400);
+                $semanas = floor($diferenca / 604800);
+                $meses = floor($diferenca / 2592000);
+                $anos = floor($diferenca / 31536000);
+
+                if ($diferenca < 60) {
+                    return "Agora mesmo";
+                } elseif ($minutos < 60) {
+                    return $minutos == 1 ? 'Há um minuto' : "Há $minutos minutos";
+                } elseif ($horas < 24) {
+                    return $horas == 1 ? 'Há uma hora' : "Há $horas horas";
+                } elseif ($dias < 7) {
+                    return $dias == 1 ? 'Ontem' : "Há $dias dias";
+                } elseif ($semanas < 5) {
+                    return $semanas == 1 ? 'Há uma semana' : "Há $semanas semanas";
+                } elseif ($meses < 12) {
+                    return $meses == 1 ? 'Há um mês' : "Há $meses meses";
+                } else {
+                    return $anos == 1 ? 'Há um ano' : "Há $anos anos";
+                }
+            }
 
             if ($resultComentarios && $resultComentarios->num_rows > 0) {
                 echo '<div class="comments-section">';
@@ -111,7 +133,7 @@ if ($stmt) {
                     $conteudo = nl2br(htmlspecialchars($row['Conteudo']));
                     $username = htmlspecialchars($row['Username']);
                     $data = htmlspecialchars($row['DataDeComentario']);
-                    $dataFormatada = date('d/m/Y H:i:s', strtotime($data));
+                    $dataFormatada = tempoRelativo($data);
 
                     echo "<div class='comment'>";
                     echo "<form action='PerfilComment.php' method='post'>";
