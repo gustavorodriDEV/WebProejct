@@ -12,6 +12,8 @@ class MovieDetails {
               AND (p.Descricao IS NOT NULL AND p.Descricao != '' AND p.Descricao != '0')
             ORDER BY p.DataDeLancamento DESC";
 
+    // Defina para o fuso horário apropriado
+
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $nomeUsuario = autenticacao::getUsername();
@@ -35,7 +37,7 @@ class MovieDetails {
                 echo '      <div class="info-item"><strong>Título do filme:</strong> <span>' . htmlspecialchars($row['Titulo']) . '</span></div><br>';
                 echo '      <div class="info-item"><strong>Diretor:</strong> <span>' . htmlspecialchars($row['Diretor']) . '</span></div><br>';
                 echo '      <div class="info-item"><strong>Categoria:</strong> <span>' . htmlspecialchars($row['Categoria']) . '</span></div><br>';
-                echo '      <div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div><br>';
+                echo '<div class="info-item"><strong>Ano:</strong> <span>' . date('Y', strtotime($row['DataDeLancamento'])) . '</span></div><br>';
                 echo '      <div class="info-item"><strong>Avaliação:</strong> <span>';
                 if ($row['Pontuacao'] !== null) {
                     for ($i = 0; $i < 5; $i++) {
@@ -55,7 +57,7 @@ class MovieDetails {
                 echo '    <input type="hidden" name="Categoria" value="' . htmlspecialchars($row['Categoria']) . '">';
                 echo '    <input type="hidden" name="DataDeLancamento" value="' . htmlspecialchars($row['DataDeLancamento']) . '">';
                 echo '    <input type="hidden" name="Descricao" value="' . htmlspecialchars($row['Descricao']) . '">';
-                echo '    <button type="submit" class="comment-button">Ver Comentários</button>';
+                echo '    <button type="submit" class="comment-button">Ver Discussão</button>';
                 echo '  </form>';
 
                 if ($row['username'] == $nomeUsuario || $row['adm'] == TRUE) {
@@ -72,10 +74,8 @@ class MovieDetails {
     }
 }
 
-
-
-
 class PostAdicionado {
+
     public static function displaySelectedPost($conn, $postID) {
         if ($postID > 0) {
             $sql = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.adm, u.FotoPerfil, a.Pontuacao, a.DataDaAvaliacao 
@@ -120,7 +120,6 @@ class PostAdicionado {
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -132,17 +131,17 @@ class PostAdicionado {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     </head>
     <body>
-        
-  
-     
-        <?php
-        $conn = new mysqli('localhost', 'root', '', 'webPro');
-        if ($conn->connect_error) {
-            die("Conexão falhou: " . $conn->connect_error);
-        }
 
-        MovieDetails::display($conn);
-        $conn->close();
-        ?>
+
+
+<?php
+$conn = new mysqli('localhost', 'root', '', 'webPro');
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
+}
+
+MovieDetails::display($conn);
+$conn->close();
+?>
     </body>
 </html>

@@ -83,11 +83,11 @@ body {
 
 
 .movie-description {
-    width: 45%;            /* Ajusta a largura do contêiner */
+    width: 60%;            /* Ajusta a largura do contêiner */
     text-align: center;     /* Centraliza o texto */
     overflow-wrap: break-word; /* Garante a quebra de linha em palavras longas */
     box-sizing: border-box; /* Calcula o padding e a borda no width total */
-    padding: 40px;          /* Adiciona padding para evitar que o texto toque as bordas */
+    padding: 60px;         
     margin: auto;           /* Opcional: centraliza o contêiner se não estiver dentro de um flex ou grid layout */
 }
 

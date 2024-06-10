@@ -9,11 +9,14 @@ echo $GLOBALS['navbar'];
 
 $postID = intval($_POST['PostID'] ?? 0);
 
-$sqlPost = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil
-            FROM posts p
-            LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
-            WHERE p.PostID = ?
-            ORDER BY p.DataDeLancamento DESC";
+$sqlPost = "SELECT p.PostID, p.username, p.Titulo, p.Diretor, p.Categoria, p.DataDeLancamento, p.Descricao, p.Caminho_Imagem, u.FotoPerfil, a.Pontuacao
+                FROM posts p
+                LEFT JOIN Perfilusuario u ON p.username = u.nomeUsuario
+                LEFT JOIN Avaliacoes a ON p.PostID = a.PostID
+                WHERE p.PostID = ?
+                ORDER BY a.DataDaAvaliacao DESC
+                LIMIT 1;
+                ";
 
 $stmt = $conn->prepare($sqlPost);
 $commentsHTML = '';
@@ -55,7 +58,7 @@ if ($stmt) {
     <body>
         <div class="content">
             <div class="user-info">
-                <?php if (empty($fotoPerfil)): ?>
+                <?php if (empty($fotoPerfil)): echo $pontuacao ?>
                     <i class="fas fa-user-circle avatar-icon default-avatar" style="font-size: 55px; color: #777;"></i>
                 <?php else: ?>
                     <img src="<?= $fotoPerfil ?>" alt="Perfil do usuário" class="profile-image">
@@ -73,12 +76,18 @@ if ($stmt) {
                         <div class="info-item"><strong>Ano:</strong> <span><?= $dataDeLancamento ?></span></div><br>
                         <div class="info-item"><strong>Avaliação:</strong> 
                             <span>
-                                <?php for ($i = 0; $i < 5; $i++): ?>
-                                    <i class="fas fa-star" style="color: <?= ($i < $pontuacao ? 'gold' : 'lightgray') ?>; margin-right: 2px;"></i>
-                                <?php endfor; ?>
-                                <?= $pontuacao ?> / 5
+                                <?php
+                                if ($pontuacao !== null) {
+                                    for ($i = 0; $i < 5; $i++):
+                                        echo '<i class="fas fa-star" style="color: ' . ($i < $pontuacao ? 'gold' : 'lightgray') . '; margin-right: 2px;"></i>';
+                                    endfor;
+                                } else {
+                                    echo 'Não avaliado';
+                                }
+                                ?>
                             </span>
                         </div><br>
+
                     <?php endif; ?>
                 </div>
             </div>

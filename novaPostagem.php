@@ -29,15 +29,15 @@ echo $GLOBALS['navbar'];
                             <label for="categories">Categorias</label>
                             <select id="categories" name="categories" required>
                                 <option value="">Selecione uma categoria</option>
-                                <option value="acao">Ação</option>
+                                <option value="Ação">Ação</option>
                                 <option value="aventura">Aventura</option>
                                 <option value="comedia">Comédia</option>
-                                <option value="drama">Drama</option>
+                                <option value="Romance">Drama</option>
                                 <option value="terror">Terror</option>
-                                <option value="romance">Romance</option>
+                                <option value="Romance">Romance</option>
                                 <option value="sci-fi">Sci-Fi</option>
                                 <option value="documentario">Documentário</option>
-                                <option value="fantasia">Fantasia</option>
+                                <option value="Romance">Fantasia</option>
                                 <option value="suspense">Suspense</option>
                                 <option value="animacao">Animação</option>
                                 <option value="musical">Musical</option>
